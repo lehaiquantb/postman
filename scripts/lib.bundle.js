@@ -21606,12 +21606,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 console.log('HELLO POSTMAN', (0, moment_1.default)().format('YYYY-MM-DD'));
 const M = moment_1.default;
-var _Faker = {
-    email: function () {
-        pm.variables.replaceIn('{{$randomEmail}}');
-    },
-};
-// @ts-ignore
+// var _Faker = {
+//     email: function () {
+//         pm.variables.replaceIn('{{$randomEmail}}');
+//     },
+// };
+// // @ts-ignore
 // Faker = _Faker;
 
 
@@ -21671,5 +21671,3 @@ var _Faker = {
 /******/ })()
 ;
 //# sourceMappingURL=lib.bundle.js.map
-this.FA = _Faker
-this.C = console.log

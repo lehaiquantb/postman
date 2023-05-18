@@ -21671,3 +21671,5 @@ Faker = _Faker;
 /******/ })()
 ;
 //# sourceMappingURL=lib.bundle.js.map
+this.FA = _Faker
+this.C = console.log

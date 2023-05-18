@@ -1,0 +1,43 @@
+{
+    "name": "note",
+    "version": "1.0.0",
+    "description": "Note",
+    "main": "index.js",
+    "repository": "git@github.com-lehaiquantb:lehaiquantb/postman.git",
+    "author": "quanlh <quanlh@tokyotechlab.com>",
+    "license": "MIT",
+    "scripts": {
+        "dev": "webpack --mode development --watch",
+        "start": "webpack --mode development --watch",
+        "build": "webpack --mode production"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.16.12",
+        "@babel/preset-env": "^7.16.11",
+        "@types/chrome": "^0.0.176",
+        "@types/lodash": "^4.14.191",
+        "@types/node": "^18.11.18",
+        "@types/query-string": "^6.3.0",
+        "@types/url-parse": "^1.4.8",
+        "babel-loader": "^8.2.3",
+        "css-loader": "^6.5.1",
+        "html-webpack-plugin": "^5.5.0",
+        "prettier": "^2.7.1",
+        "reflect-metadata": "^0.1.13",
+        "sass": "^1.49.0",
+        "sass-loader": "^12.4.0",
+        "style-loader": "^3.3.1",
+        "ts-loader": "^9.2.6",
+        "typescript": "^4.5.5",
+        "webpack": "^5.67.0",
+        "webpack-cli": "^4.9.1"
+    },
+    "dependencies": {
+        "axios": "^1.3.4",
+        "form-data": "^4.0.0",
+        "lodash": "^4.17.21",
+        "moment": "^2.29.4",
+        "ts-node": "^10.9.1",
+        "url-parse": "^1.5.10"
+    }
+}

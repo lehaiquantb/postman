@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "outDir": "dist",
+        "noImplicitAny": true,
+        "module": "CommonJS",
+        "target": "ESNext",
+        "allowJs": true,
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "types": [
+            "chrome",
+            "node"
+        ],
+        "lib": [
+            "ESNext",
+            "DOM",
+        ],
+    },
+    // "include": [
+    //     "src/**/*.ts",
+    //     "src/system.js",
+    //     "src/system.js",
+    // ],
+    "exclude": [
+        "node_modules"
+    ]
+}

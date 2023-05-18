@@ -2,7 +2,7 @@ import moment from 'moment';
 
 console.log('HELLO POSTMAN', moment().format('YYYY-MM-DD'));
 const M = moment
-const _Faker = {
+var _Faker = {
     email: function () {
         pm.variables.replaceIn('{{$randomEmail}}');
     },

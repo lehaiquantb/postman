@@ -21612,7 +21612,7 @@ var _Faker = {
     },
 };
 // @ts-ignore
-Faker = _Faker;
+// Faker = _Faker;
 
 
 /***/ })

@@ -1,5 +1,6 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     devtool: 'cheap-module-source-map',
@@ -7,8 +8,8 @@ module.exports = {
         lib: './src/index.ts',
     },
     output: {
-        path: path.join(__dirname, "./scripts"), // Thư mục chứa file được build ra
-        filename: "[name].bundle.js" // Tên file được build ra
+        path: path.join(__dirname, './scripts'), // Thư mục chứa file được build ra
+        filename: '[name].bundle.js', // Tên file được build ra
     },
     module: {
         rules: [
@@ -33,33 +34,49 @@ module.exports = {
                                 },
                             ],
                         ],
-                    }
-                }
+                    },
+                },
             },
             {
                 test: /\.s[ac]ss$/i,
                 use: [
                     // Creates `style` nodes from JS strings
-                    "style-loader",
+                    'style-loader',
                     // Translates CSS into CommonJS
-                    "css-loader",
+                    'css-loader',
                     // Compiles Sass to CSS
-                    "sass-loader",
+                    'sass-loader',
                 ],
             },
             {
                 test: /\.css$/, // Sử dụng style-loader, css-loader cho file .css
-                use: ["style-loader", "css-loader"]
-            }
-        ]
+                use: ['style-loader', 'css-loader'],
+            },
+        ],
     },
     resolve: {
         extensions: ['.ts', '.js'],
+        alias: {
+            utils1: path.resolve(__dirname, './src/utils'), // <-- When you build or restart dev-server, you'll get an error if the path to your utils.js file is incorrect.
+        },
     },
     // Chứa các plugins sẽ cài đặt trong tương lai
-    // plugins: [
-    //     new HtmlWebpackPlugin({
-    //         template: "./js/index.html"
-    //     })
-    // ]
+    plugins: [
+        // new HtmlWebpackPlugin({
+        //     template: './js/index.html',
+        // }),
+        new webpack.ProvidePlugin({
+            _: 'lodash',
+        }),
+        new webpack.ProvidePlugin({
+            utils1: 'utils1',
+        }),
+    ],
+    externals: {
+        utils1: {},
+        // lodash: `{
+        //     serverUrl: '${env.server}',
+        //     cordovaBuild: '${env.cordova}',
+        //   }`,
+    },
 };

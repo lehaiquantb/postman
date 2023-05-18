@@ -21605,6 +21605,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 console.log('HELLO POSTMAN', (0, moment_1.default)().format('YYYY-MM-DD'));
+const M = moment_1.default;
+const _Faker = {
+    email: function () {
+        pm.variables.replaceIn('{{$randomEmail}}');
+    },
+};
+// @ts-ignore
+Faker = _Faker;
 
 
 /***/ })

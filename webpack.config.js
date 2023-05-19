@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
     devtool: 'cheap-module-source-map',
     entry: {
-        lib: './src/index.ts',
+        lib: './src/m.js',
     },
     output: {
         path: path.join(__dirname, './scripts'), // Thư mục chứa file được build ra
@@ -51,6 +51,15 @@ module.exports = {
             {
                 test: /\.css$/, // Sử dụng style-loader, css-loader cho file .css
                 use: ['style-loader', 'css-loader'],
+            },
+            {
+                test: require.resolve('./src/utils.ts'),
+                use: {
+                    loader: 'expose-loader',
+                    options: {
+                        exports: 'single myGlobalVariable sayHello',
+                    }, // The name of the global variable you want to expose
+                },
             },
         ],
     },

@@ -38803,13 +38803,25 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
 /***/ }),
 
+/***/ "./src/utils.ts":
+/*!**********************!*\
+  !*** ./src/utils.ts ***!
+  \**********************/
+/***/ (() => {
+
+throw new Error("Module build failed (from ./node_modules/expose-loader/dist/cjs.js):\nValidationError: Invalid options object. Expose Loader has been initialized using an options object that does not match the API schema.\n - options misses the property 'exposes'. Should be:\n   non-empty string | object { globalName, moduleLocalName?, override? } | [non-empty string | object { globalName, moduleLocalName?, override? }, ...] (should not have fewer than 1 item)\n   -> List of exposes.\n   -> Read more at https://github.com/webpack-contrib/expose-loader#exposes\n    at validate (D:\\ttlab\\postman\\node_modules\\schema-utils\\dist\\validate.js:105:11)\n    at Object.getOptions (D:\\ttlab\\postman\\node_modules\\webpack\\lib\\NormalModule.js:585:19)\n    at Object.loader (D:\\ttlab\\postman\\node_modules\\expose-loader\\dist\\index.js:16:24)");
+
+/***/ }),
+
 /***/ "./src/index.ts":
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
+
 "use strict";
+/* provided dependency */ var myGlobalVariable = __webpack_require__(/*! ./src/utils.ts */ "./src/utils.ts");
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -38820,6 +38832,7 @@ const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modul
 const _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 const utils = __webpack_require__(/*! utils1 */ "utils1");
 console.log('HELLO POSTMAN', (0, moment_1.default)().format('YYYY-MM-DD'));
+console.log(pm)
 const M = moment_1.default;
 const _Faker = {
     email: function () {
@@ -38827,6 +38840,10 @@ const _Faker = {
     },
 };
 exports._Faker = _Faker;
+// _.add(5, 5);
+// this.Faker = _Faker;
+// Faker = _Faker;
+console.log(myGlobalVariable);
 
 
 /***/ }),

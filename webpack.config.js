@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
     devtool: 'cheap-module-source-map',
     entry: {
-        lib: './src/m.js',
+        lib: './src/index.ts',
     },
     output: {
         path: path.join(__dirname, './scripts'), // Thư mục chứa file được build ra
@@ -79,6 +79,9 @@ module.exports = {
         }),
         new webpack.ProvidePlugin({
             utils1: 'utils1',
+        }),
+        new webpack.ProvidePlugin({
+            myGlobalVariable: path.resolve(__dirname, './src/utils.ts'),
         }),
     ],
     externals: {

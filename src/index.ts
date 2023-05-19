@@ -12,5 +12,5 @@ const _Faker = {
 // _.add(5, 5);
 // this.Faker = _Faker;
 // Faker = _Faker;
-
+// console.log(myGlobalVariable)
 export { _Faker };

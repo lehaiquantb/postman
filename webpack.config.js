@@ -56,9 +56,7 @@ module.exports = {
                 test: require.resolve('./src/utils.ts'),
                 use: {
                     loader: 'expose-loader',
-                    options: {
-                        exports: 'single myGlobalVariable sayHello',
-                    }, // The name of the global variable you want to expose
+                    options: 'myGlobalVariablex', // The name of the global variable you want to expose
                 },
             },
         ],

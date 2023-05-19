@@ -38803,25 +38803,13 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
 /***/ }),
 
-/***/ "./src/utils.ts":
-/*!**********************!*\
-  !*** ./src/utils.ts ***!
-  \**********************/
-/***/ (() => {
-
-throw new Error("Module build failed (from ./node_modules/expose-loader/dist/cjs.js):\nValidationError: Invalid options object. Expose Loader has been initialized using an options object that does not match the API schema.\n - options misses the property 'exposes'. Should be:\n   non-empty string | object { globalName, moduleLocalName?, override? } | [non-empty string | object { globalName, moduleLocalName?, override? }, ...] (should not have fewer than 1 item)\n   -> List of exposes.\n   -> Read more at https://github.com/webpack-contrib/expose-loader#exposes\n    at validate (D:\\ttlab\\postman\\node_modules\\schema-utils\\dist\\validate.js:105:11)\n    at Object.getOptions (D:\\ttlab\\postman\\node_modules\\webpack\\lib\\NormalModule.js:585:19)\n    at Object.loader (D:\\ttlab\\postman\\node_modules\\expose-loader\\dist\\index.js:16:24)");
-
-/***/ }),
-
 /***/ "./src/index.ts":
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
-
 "use strict";
-/* provided dependency */ var myGlobalVariable = __webpack_require__(/*! ./src/utils.ts */ "./src/utils.ts");
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -38832,18 +38820,14 @@ const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modul
 const _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 const utils = __webpack_require__(/*! utils1 */ "utils1");
 console.log('HELLO POSTMAN', (0, moment_1.default)().format('YYYY-MM-DD'));
-console.log(pm)
 const M = moment_1.default;
-const _Faker = {
+var _Faker = {
     email: function () {
         pm.variables.replaceIn('{{$randomEmail}}');
     },
 };
 exports._Faker = _Faker;
-// _.add(5, 5);
-// this.Faker = _Faker;
-// Faker = _Faker;
-console.log(myGlobalVariable);
+eval(`pm.globals.set('myGlobalVariable', _Faker)`);
 
 
 /***/ }),
@@ -38889,30 +38873,6 @@ module.exports = undefined;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -38930,17 +38890,6 @@ module.exports = undefined;
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
 /******/ 		__webpack_require__.nmd = (module) => {
@@ -38951,21 +38900,12 @@ module.exports = undefined;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-/*!******************!*\
-  !*** ./src/m.js ***!
-  \******************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./src/index.ts");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_index__WEBPACK_IMPORTED_MODULE_0__);
-
-console.log('================================');
-var Faker = _index__WEBPACK_IMPORTED_MODULE_0__._Faker;
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.ts");
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=lib.bundle.js.map

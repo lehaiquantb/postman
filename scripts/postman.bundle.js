@@ -1,3 +1,4 @@
+var Postman = {};
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 

@@ -1,23 +1,35 @@
 const fs = require('fs');
 const path = require('path');
+const minmist = require('minimist');
 
-const filePath = path.resolve(__dirname, '../scripts/lib.bundle.js');
+let filePath = path.resolve(__dirname, '../scripts/postman.bundle.js');
 const newText = 'var Postman = {};\n';
 
-fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-        console.error(err);
-        return;
+function makePostmanIsGlobal() {
+    const params = minmist(process.argv);
+    const { mode } = params;
+    if (mode === 'production') {
+        filePath = path.resolve(__dirname, '../scripts/postman.min.js');
     }
-
-    const updatedContent = newText + data;
-
-    fs.writeFile(filePath, updatedContent, 'utf8', (err) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             console.error(err);
             return;
         }
 
-        console.log('Text added to the beginning of the file successfully.');
+        const updatedContent = newText + data;
+
+        fs.writeFile(filePath, updatedContent, 'utf8', (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+
+            console.log(
+                'Text added to the beginning of the file successfully.',
+            );
+        });
     });
-});
+}
+
+makePostmanIsGlobal();

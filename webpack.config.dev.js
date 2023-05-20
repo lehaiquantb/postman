@@ -1,11 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const { exec } = require('child_process');
 
 module.exports = {
     devtool: 'cheap-module-source-map',
     entry: {
-        lib: './src/index.ts',
+        postman: './src/lib/postman.ts',
     },
     output: {
         path: path.join(__dirname, './scripts'), // Thư mục chứa file được build ra
@@ -52,20 +53,20 @@ module.exports = {
                 test: /\.css$/, // Sử dụng style-loader, css-loader cho file .css
                 use: ['style-loader', 'css-loader'],
             },
-            {
-                test: require.resolve('./src/utils.ts'),
-                use: {
-                    loader: 'expose-loader',
-                    options: 'myGlobalVariablex', // The name of the global variable you want to expose
-                },
-            },
+            // {
+            //     test: require.resolve('./src/utils.ts'),
+            //     use: {
+            //         loader: 'expose-loader',
+            //         options: 'myGlobalVariablex', // The name of the global variable you want to expose
+            //     },
+            // },
         ],
     },
     resolve: {
         extensions: ['.ts', '.js'],
-        alias: {
-            utils1: path.resolve(__dirname, './src/utils'), // <-- When you build or restart dev-server, you'll get an error if the path to your utils.js file is incorrect.
-        },
+        // alias: {
+        //     utils1: path.resolve(__dirname, './src/utils'), // <-- When you build or restart dev-server, you'll get an error if the path to your utils.js file is incorrect.
+        // },
     },
     // Chứa các plugins sẽ cài đặt trong tương lai
     plugins: [
@@ -75,15 +76,37 @@ module.exports = {
         new webpack.ProvidePlugin({
             _: 'lodash',
         }),
-        new webpack.ProvidePlugin({
-            utils1: 'utils1',
-        }),
-        new webpack.ProvidePlugin({
-            myGlobalVariable: path.resolve(__dirname, './src/utils.ts'),
-        }),
+        // new webpack.ProvidePlugin({
+        //     utils1: 'utils1',
+        // }),
+        // new webpack.ProvidePlugin({
+        //     myGlobalVariable: path.resolve(__dirname, './src/utils.ts'),
+        // }),
+        {
+            apply: (compiler) => {
+                compiler.hooks.afterEmit.tap(
+                    'AfterEmitPlugin',
+                    (compilation) => {
+                        exec(
+                            `node ${path.resolve(
+                                __dirname,
+                                './bin/postBuild.js',
+                            )}`,
+                            (err, stdout, stderr) => {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log(stdout);
+                                }
+                            },
+                        );
+                    },
+                );
+            },
+        },
     ],
     externals: {
-        utils1: {},
+        // utils1: {},
         // lodash: `{
         //     serverUrl: '${env.server}',
         //     cordovaBuild: '${env.cordova}',

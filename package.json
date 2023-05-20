@@ -7,9 +7,8 @@
     "author": "quanlh <quanlh@tokyotechlab.com>",
     "license": "MIT",
     "scripts": {
-        "dev": "webpack --mode development --watch",
-        "start": "webpack --mode development --watch",
-        "build": "webpack --mode production"
+        "dev": "webpack --mode development --config webpack.config.dev.js --watch",
+        "build": "webpack --mode production --config webpack.config.prod.js"
     },
     "devDependencies": {
         "@babel/core": "^7.16.12",
@@ -21,8 +20,14 @@
         "@types/url-parse": "^1.4.8",
         "babel-loader": "^8.2.3",
         "css-loader": "^6.5.1",
+        "eslint": "^8.41.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-prettier": "^4.2.1",
         "expose-loader": "^4.1.0",
         "html-webpack-plugin": "^5.5.0",
+        "husky": "^8.0.3",
+        "lint-staged": "^13.2.2",
+        "onchange": "^7.1.0",
         "prettier": "^2.7.1",
         "reflect-metadata": "^0.1.13",
         "sass": "^1.49.0",

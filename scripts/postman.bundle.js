@@ -21609,7 +21609,10 @@ const helper_1 = __importDefault(__webpack_require__(/*! ../utils/helper */ "./s
 console.log('HELLO POSTMAN', (0, moment_1.default)().format('YYYY-MM-DD'));
 const _Postman = {
     email: function () {
+        console.log(1);
+        console.log('PM', pm);
         pm.variables.replaceIn('{{$randomEmail}}');
+        console.log(2);
     },
     moment: moment_1.default,
     u: helper_1.default,

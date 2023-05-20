@@ -4,7 +4,10 @@ console.log('HELLO POSTMAN', moment().format('YYYY-MM-DD'));
 
 const _Postman = {
     email: function () {
+        console.log(1);
+        console.log('PM', pm);
         pm.variables.replaceIn('{{$randomEmail}}');
+        console.log(2);
     },
     moment,
     u: utils,

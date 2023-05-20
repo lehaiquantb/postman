@@ -7,7 +7,7 @@ let scriptText;
 const getPostmanScript = function () {
     return new Promise((resolve) => {
         pm.sendRequest(
-            'https://raw.githubusercontent.com/lehaiquantb/postman/main/scripts/lib.bundle.js',
+            'https://raw.githubusercontent.com/lehaiquantb/postman/main/scripts/postman.min.js',
             function (err, res) {
                 console.log('err', err);
                 if (!err) {

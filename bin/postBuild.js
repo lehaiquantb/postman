@@ -3,7 +3,7 @@ const path = require('path');
 const minmist = require('minimist');
 
 let filePath = path.resolve(__dirname, '../scripts/postman.bundle.js');
-const newText = 'var Postman = {};\n';
+const newText = 'var _Postman_ = {};\n';
 
 function makePostmanIsGlobal() {
     const params = minmist(process.argv);

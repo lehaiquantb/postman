@@ -1,19 +1,23 @@
 import moment from 'moment';
 import utils from '../utils/helper';
-import faker from './faker';
+import faker from '../utils/faker';
 import variable from '../utils/variable';
+import tester from '../utils/tester';
+import request from '../utils/request';
 
-console.log('HELLO POSTMAN', moment().format('YYYY-MM-DD'));
+console.log('HELLO POSTMAN at', moment().format('YYYY-MM-DD'));
 
 export const _Postman: any = {
     Faker: faker,
     Utils: utils,
     Moment: moment,
     Variable: variable,
+    Tester: tester,
+    Request: request,
 };
 _Postman.self = _Postman;
 
-console.log('XXXxx');
+// console.log('XXXxx');
 // console
 // eval(`pm.globals.set('myGlobalVariable', _Faker)`);
 // _.add(5, 5);
@@ -22,4 +26,4 @@ console.log('XXXxx');
 // export { _Faker };
 
 // @ts-ignore
-Postman = _Postman;
+_Postman_ = _Postman;

@@ -21592,6 +21592,24 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
 /***/ }),
 
+/***/ "./src/lib/faker.ts":
+/*!**************************!*\
+  !*** ./src/lib/faker.ts ***!
+  \**************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports["default"] = {
+    email: function () {
+        return pm.variables.replaceIn('{{$randomEmail}}');
+    },
+};
+
+
+/***/ }),
+
 /***/ "./src/lib/postman.ts":
 /*!****************************!*\
   !*** ./src/lib/postman.ts ***!
@@ -21604,20 +21622,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports._Postman = void 0;
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 const helper_1 = __importDefault(__webpack_require__(/*! ../utils/helper */ "./src/utils/helper.ts"));
+const faker_1 = __importDefault(__webpack_require__(/*! ./faker */ "./src/lib/faker.ts"));
+const variable_1 = __importDefault(__webpack_require__(/*! ../utils/variable */ "./src/utils/variable.ts"));
 console.log('HELLO POSTMAN', (0, moment_1.default)().format('YYYY-MM-DD'));
-const _Postman = {
-    email: function () {
-        console.log(1);
-        console.log('PM', pm);
-        pm.variables.replaceIn('{{$randomEmail}}');
-        console.log(2);
-    },
-    moment: moment_1.default,
-    u: helper_1.default,
-    m: moment_1.default,
+exports._Postman = {
+    Faker: faker_1.default,
+    Utils: helper_1.default,
+    Moment: moment_1.default,
+    Variable: variable_1.default,
 };
+exports._Postman.self = exports._Postman;
 console.log('XXXxx');
 // console
 // eval(`pm.globals.set('myGlobalVariable', _Faker)`);
@@ -21626,7 +21643,7 @@ console.log('XXXxx');
 // console.log(myGlobalVariable)
 // export { _Faker };
 // @ts-ignore
-Postman = _Postman;
+Postman = exports._Postman;
 
 
 /***/ }),
@@ -21640,14 +21657,54 @@ Postman = _Postman;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sayHello = void 0;
 function sayHello() {
     console.log('hello');
 }
-exports.sayHello = sayHello;
 exports["default"] = {
     sayHello,
 };
+
+
+/***/ }),
+
+/***/ "./src/utils/variable.ts":
+/*!*******************************!*\
+  !*** ./src/utils/variable.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const variable = {
+    _helper_: {
+        generateCustomVariables,
+    },
+};
+function generateCustomVariables() {
+    const variableKeys = [];
+    // const string = "{{!aas().asd'}}1212{{!bas}}";
+    const regexp = /{{(![^\}\{]+)}}/g;
+    let matchText = '';
+    const request = pm.request;
+    const { url: { query }, headers, body, } = pm.request;
+    query?.each((q) => {
+        matchText += `${q?.key}\n${q?.value}\n`;
+    }, null);
+    headers?.each((h) => {
+        matchText += `${h?.key}\n${h?.value}\n`;
+    }, null);
+    if ((body.mode = 'raw')) {
+        matchText += `${body?.raw}\n`;
+    }
+    const matches = matchText.matchAll(regexp);
+    for (const match of matches) {
+        variableKeys.push(match?.[1]);
+    }
+    console.log('variableKeys', variableKeys);
+    // console.log('generateVariables');
+}
+exports["default"] = variable;
 
 
 /***/ })

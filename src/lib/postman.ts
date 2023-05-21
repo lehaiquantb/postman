@@ -1,18 +1,18 @@
 import moment from 'moment';
 import utils from '../utils/helper';
+import faker from './faker';
+import variable from '../utils/variable';
+
 console.log('HELLO POSTMAN', moment().format('YYYY-MM-DD'));
 
-const _Postman = {
-    email: function () {
-        console.log(1);
-        console.log('PM', pm);
-        pm.variables.replaceIn('{{$randomEmail}}');
-        console.log(2);
-    },
-    moment,
-    u: utils,
-    m: moment,
+export const _Postman: any = {
+    Faker: faker,
+    Utils: utils,
+    Moment: moment,
+    Variable: variable,
 };
+_Postman.self = _Postman;
+
 console.log('XXXxx');
 // console
 // eval(`pm.globals.set('myGlobalVariable', _Faker)`);

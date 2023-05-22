@@ -3,3 +3,4 @@ export default {
         return pm.variables.replaceIn('{{$randomEmail}}');
     },
 };
+

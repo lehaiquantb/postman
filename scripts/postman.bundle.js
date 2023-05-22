@@ -21605,19 +21605,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
+const helper_1 = __importDefault(__webpack_require__(/*! ../utils/helper */ "./src/utils/helper.ts"));
 const faker_1 = __importDefault(__webpack_require__(/*! ../utils/faker */ "./src/utils/faker.ts"));
+const variable_1 = __importDefault(__webpack_require__(/*! ../utils/variable */ "./src/utils/variable.ts"));
+const tester_1 = __importDefault(__webpack_require__(/*! ../utils/tester */ "./src/utils/tester.ts"));
+const request_1 = __importDefault(__webpack_require__(/*! ../utils/request */ "./src/utils/request.ts"));
 console.log('HELLO POSTMAN at', (0, moment_1.default)().format('YYYY-MM-DD'));
-// export const _Postman: any = {
-//     Faker: faker,
-//     Utils: utils,
-//     Moment: moment,
-//     Variable: variable,
-//     Tester: tester,
-//     Request: request,
-// };
 class Postman {
     constructor() { }
-    Faker = faker_1.default;
+    static Faker = faker_1.default;
+    static Utils = helper_1.default;
+    static Moment = moment_1.default;
+    static Variable = variable_1.default;
+    static Tester = tester_1.default;
+    static Request = request_1.default;
 }
 const _Postman = new Postman();
 // console.log('XXXxx');
@@ -21647,6 +21648,131 @@ exports["default"] = {
         return pm.variables.replaceIn('{{$randomEmail}}');
     },
 };
+
+
+/***/ }),
+
+/***/ "./src/utils/helper.ts":
+/*!*****************************!*\
+  !*** ./src/utils/helper.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+function sayHello() {
+    console.log('hello');
+}
+exports["default"] = {
+    sayHello,
+};
+
+
+/***/ }),
+
+/***/ "./src/utils/request.ts":
+/*!******************************!*\
+  !*** ./src/utils/request.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const request = {
+    addParam: function (key, value) {
+        pm.request.addQueryParams([{ key, value }]);
+        // pm.request.url
+    },
+};
+exports["default"] = request;
+
+
+/***/ }),
+
+/***/ "./src/utils/tester.ts":
+/*!*****************************!*\
+  !*** ./src/utils/tester.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tester = {};
+exports["default"] = tester;
+
+
+/***/ }),
+
+/***/ "./src/utils/variable.ts":
+/*!*******************************!*\
+  !*** ./src/utils/variable.ts ***!
+  \*******************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
+const faker_1 = __importDefault(__webpack_require__(/*! ./faker */ "./src/utils/faker.ts"));
+const variable = {
+    _helper_: {
+        generateCustomVariables,
+        evaluateVariable,
+    },
+    _context_: {
+        moment: moment_1.default,
+        faker: faker_1.default,
+    },
+};
+function evaluateVariable(evaluateString, variableKey) {
+    try {
+        let v = variable?.[variableKey];
+        const { moment, faker } = variable?._context_;
+        if (!v) {
+            v = eval(evaluateString);
+        }
+        return v;
+    }
+    catch (error) {
+        return undefined;
+    }
+}
+// evaluateVariable('moment()');
+function generateCustomVariables() {
+    const variableKeys = [];
+    // const string = "{{!aas().asd'}}1212{{!bas}}";
+    const regexp = /{{(![^\}\{]+)}}/g;
+    let matchText = '';
+    const request = pm.request;
+    const { url: { query }, headers, body, } = pm.request;
+    query?.each((q) => {
+        matchText += `${q?.key}\n${q?.value}\n`;
+    }, null);
+    headers?.each((h) => {
+        matchText += `${h?.key}\n${h?.value}\n`;
+    }, null);
+    if ((body.mode = 'raw')) {
+        matchText += `${body?.raw}\n`;
+    }
+    const matches = matchText.matchAll(regexp);
+    for (const match of matches) {
+        variableKeys.push(match?.[1]);
+    }
+    variableKeys.forEach((key) => {
+        const evaluateString = key.replace('!', '');
+        const value = evaluateVariable(evaluateString, key);
+        pm.collectionVariables.set(key, value);
+    });
+    // console.log('variableKeys', variableKeys);
+    // console.log('generateVariables');
+}
+exports["default"] = variable;
 
 
 /***/ })

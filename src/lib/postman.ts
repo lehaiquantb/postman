@@ -7,14 +7,26 @@ import request from '../utils/request';
 
 console.log('HELLO POSTMAN at', moment().format('YYYY-MM-DD'));
 
+class X {
+    v = 1;
+    constructor() {
+        this.v = 2;
+    }
+}
+
 class Postman {
     constructor() {}
     Faker = faker;
     Utils = utils;
     Moment = moment;
-    Variable = variable;
+    static Variable = variable;
     Tester = tester;
     Request = request;
+    xs: X[] = [];
+
+    addX() {
+        this.xs.push(new X());
+    }
 }
 
 const _Postman = new Postman();

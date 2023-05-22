@@ -21611,14 +21611,24 @@ const variable_1 = __importDefault(__webpack_require__(/*! ../utils/variable */ 
 const tester_1 = __importDefault(__webpack_require__(/*! ../utils/tester */ "./src/utils/tester.ts"));
 const request_1 = __importDefault(__webpack_require__(/*! ../utils/request */ "./src/utils/request.ts"));
 console.log('HELLO POSTMAN at', (0, moment_1.default)().format('YYYY-MM-DD'));
+class X {
+    v = 1;
+    constructor() {
+        this.v = 2;
+    }
+}
 class Postman {
     constructor() { }
-    static Faker = faker_1.default;
-    static Utils = helper_1.default;
-    static Moment = moment_1.default;
+    Faker = faker_1.default;
+    Utils = helper_1.default;
+    Moment = moment_1.default;
     static Variable = variable_1.default;
-    static Tester = tester_1.default;
-    static Request = request_1.default;
+    Tester = tester_1.default;
+    Request = request_1.default;
+    xs = [];
+    addX() {
+        this.xs.push(new X());
+    }
 }
 const _Postman = new Postman();
 // console.log('XXXxx');

@@ -21629,6 +21629,9 @@ class Postman {
     addX() {
         this.xs.push(new X());
     }
+    showX() {
+        console.log(this.xs);
+    }
 }
 const _Postman = new Postman();
 // console.log('XXXxx');

@@ -7,15 +7,22 @@ import request from '../utils/request';
 
 console.log('HELLO POSTMAN at', moment().format('YYYY-MM-DD'));
 
-export const _Postman: any = {
-    Faker: faker,
-    Utils: utils,
-    Moment: moment,
-    Variable: variable,
-    Tester: tester,
-    Request: request,
-};
-_Postman.self = _Postman;
+// export const _Postman: any = {
+//     Faker: faker,
+//     Utils: utils,
+//     Moment: moment,
+//     Variable: variable,
+//     Tester: tester,
+//     Request: request,
+// };
+
+class Postman {
+    constructor() {}
+
+    Faker = faker;
+}
+
+const _Postman = new Postman();
 
 // console.log('XXXxx');
 // console

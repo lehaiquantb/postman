@@ -18,7 +18,6 @@ console.log('HELLO POSTMAN at', moment().format('YYYY-MM-DD'));
 
 class Postman {
     constructor() {}
-
     Faker = faker;
 }
 

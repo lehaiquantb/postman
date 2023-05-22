@@ -9,12 +9,12 @@ console.log('HELLO POSTMAN at', moment().format('YYYY-MM-DD'));
 
 class Postman {
     constructor() {}
-    static Faker = faker;
-    static Utils = utils;
-    static Moment = moment;
-    static Variable = variable;
-    static Tester = tester;
-    static Request = request;
+    Faker = faker;
+    Utils = utils;
+    Moment = moment;
+    Variable = variable;
+    Tester = tester;
+    Request = request;
 }
 
 const _Postman = new Postman();

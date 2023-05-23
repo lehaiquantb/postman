@@ -24378,7 +24378,7 @@ __decorate([
     @_Postman_:
 */
 const _postman = new Postman();
-console.log('HELLO POSTMAN version', Postman.version);
+console.log('HELLO POSTMAN with version => ', Postman.version);
 // @ts-ignore
 _postman_ = _postman;
 // @ts-ignore

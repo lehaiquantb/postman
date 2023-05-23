@@ -24350,7 +24350,7 @@ __decorate([
 //     console.log(x);
 // });
 // const m = new X();
-console.log((0, class_transformer_1.instanceToPlain)(postman));
+// console.log(instanceToPlain(postman));
 // console.log(
 //     plainToInstance(Postman, {
 //         Tester: {},

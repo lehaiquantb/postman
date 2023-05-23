@@ -132,7 +132,7 @@ class Postman {
 // });
 // const m = new X();
 
-console.log(instanceToPlain(postman));
+// console.log(instanceToPlain(postman));
 // console.log(
 //     plainToInstance(Postman, {
 //         Tester: {},

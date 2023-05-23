@@ -6,7 +6,7 @@ let filePath = path.resolve(__dirname, '../scripts/postman.bundle.js');
 const newText = `var pm = {};\nvar _postman_ = {};\n
 var _Postman_ = {};\n
 var _serializer = {};\n
-var __VERSION__ = '';`;
+var __VERSION__ = "${new Date().toISOString()}";`;
 
 function makePostmanIsGlobal() {
     const params = minmist(process.argv);

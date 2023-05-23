@@ -23,7 +23,6 @@ export class X {
     }
 }
 
-
 class Postman {
     constructor() {}
 
@@ -94,8 +93,9 @@ class Postman {
 
     snapShot(_pm?: Postman): void {
         const postmanObj = instanceToPlain(_pm ?? this);
-        // console.log(Postman.version);
-        Variable.set(Postman.Constants.CKey.POSTMAN_PLAIN, postmanObj);
+        console.log(Postman.version);
+        pm?.collectionVariables?.set('POSTMAN_PLAIN', 'ád', 'String' as any);
+        console.log(pm?.collectionVariables?.get('xxx'));
     }
 
     static init() {
@@ -103,14 +103,15 @@ class Postman {
         const postmanPlain = pm?.collectionVariables?.get(
             Postman.Constants.CKey.POSTMAN_PLAIN,
         );
+        console.log('postmanPlain', postmanPlain);
         const postmanObj = Postman.Helper.parseJson(postmanPlain) ?? {};
         // @ts-ignore
         if (__VERSION__ !== postmanObj?.version) {
             postman = new Postman();
-            Variable.set(
-                Postman.Constants.CKey.POSTMAN_PLAIN,
-                instanceToPlain(postman),
-            );
+            // Variable.set(
+            //     Postman.Constants.CKey.POSTMAN_PLAIN,
+            //     instanceToPlain(postman),
+            // );
         } else {
             postman = plainToInstance(Postman, postmanObj);
         }
@@ -119,9 +120,13 @@ class Postman {
     }
 
     static onPreRequest(callback: (postman: Postman) => void): void {
-        const postman = Postman.init();
-        callback(postman);
-        postman.snapShot();
+        const _p = Postman.init();
+        callback(_p);
+        _p.snapShot(_p);
+    }
+
+    addRunner(runner = new Runner()) {
+        this.runnerList.push(runner);
     }
 }
 
@@ -162,7 +167,7 @@ class Postman {
     @_Postman_:
 */
 const _postman = new Postman();
-console.log(instanceToPlain(_postman));
+// console.log(instanceToPlain(_postman));
 
 console.log('HELLO POSTMAN with version => ', Postman.version);
 
@@ -172,5 +177,5 @@ _postman_ = _postman;
 // @ts-ignore
 _Postman_ = Postman;
 
-// @ts-ignore 
+// @ts-ignore
 __VERSION__ = Postman.version;

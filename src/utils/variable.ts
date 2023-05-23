@@ -5,6 +5,7 @@ export class Variable {
     constructor() {}
 
     static get(key: string): any {
+        console.log('get', key);
         if (pm?.collectionVariables?.get) {
             return pm?.collectionVariables?.get(key);
         }
@@ -12,12 +13,9 @@ export class Variable {
     }
 
     static set(key: string, value: any, type?: any): void {
+        console.log('set', key, value, pm?.collectionVariables?.set);
         if (pm?.collectionVariables?.set) {
-            let _v = value;
-            if (typeof value === 'object') {
-                _v = JSON.stringify(value);
-            }
-            pm?.collectionVariables?.set(key, _v, type);
+            pm?.collectionVariables?.set(key, value);
         }
     }
 

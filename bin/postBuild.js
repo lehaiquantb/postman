@@ -3,7 +3,7 @@ const path = require('path');
 const minmist = require('minimist');
 
 let filePath = path.resolve(__dirname, '../scripts/postman.bundle.js');
-const newText = `var _postman_ = {};\n
+let newText = `var _postman_ = {};\n
 var _Postman_ = {};\n
 var _serializer = {};\n
 var __VERSION__ = "${new Date().toISOString()}";`;
@@ -13,6 +13,9 @@ function makePostmanIsGlobal() {
     const { mode } = params;
     if (mode === 'production') {
         filePath = path.resolve(__dirname, '../scripts/postman.min.js');
+    }
+    if (mode == 'development') {
+        newText += `var pm = {};\n`;
     }
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {

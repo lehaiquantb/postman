@@ -2,7 +2,6 @@ import { Type } from 'class-transformer';
 import { X } from '../lib/postman';
 import { Serializable } from '../@types/index';
 
-const pm: any = {};
 
 type QueryParam = {
     key: string;

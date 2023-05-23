@@ -4,7 +4,8 @@ var _Postman_ = {};
 
 var _serializer = {};
 
-var __VERSION__ = "2023-05-23T11:27:57.237Z"; /******/ (() => { // webpackBootstrap
+var __VERSION__ = "2023-05-23T12:21:07.397Z";var pm = {};
+ /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./node_modules/class-transformer/esm5/ClassTransformer.js":
@@ -24124,7 +24125,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Request = void 0;
 const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
 const postman_1 = __webpack_require__(/*! ../lib/postman */ "./src/lib/postman.ts");
-const pm = {};
 const request = {
     addParam: function (key, value) {
         // pm.request.addQueryParams([{ key, value } as any]);
@@ -24299,17 +24299,22 @@ class Postman {
     // }
     snapShot(_pm) {
         const postmanObj = (0, class_transformer_1.instanceToPlain)(_pm ?? this);
-        // console.log(Postman.version);
-        variable_1.Variable.set(Postman.Constants.CKey.POSTMAN_PLAIN, postmanObj);
+        console.log(Postman.version);
+        pm?.collectionVariables?.set('POSTMAN_PLAIN', 'ád', 'String');
+        console.log(pm?.collectionVariables?.get('xxx'));
     }
     static init() {
         let postman;
         const postmanPlain = pm?.collectionVariables?.get(Postman.Constants.CKey.POSTMAN_PLAIN);
+        console.log('postmanPlain', postmanPlain);
         const postmanObj = Postman.Helper.parseJson(postmanPlain) ?? {};
         // @ts-ignore
         if (__VERSION__ !== postmanObj?.version) {
             postman = new Postman();
-            variable_1.Variable.set(Postman.Constants.CKey.POSTMAN_PLAIN, (0, class_transformer_1.instanceToPlain)(postman));
+            // Variable.set(
+            //     Postman.Constants.CKey.POSTMAN_PLAIN,
+            //     instanceToPlain(postman),
+            // );
         }
         else {
             postman = (0, class_transformer_1.plainToInstance)(Postman, postmanObj);
@@ -24317,9 +24322,12 @@ class Postman {
         return postman;
     }
     static onPreRequest(callback) {
-        const postman = Postman.init();
-        callback(postman);
-        postman.snapShot();
+        const _p = Postman.init();
+        callback(_p);
+        _p.snapShot(_p);
+    }
+    addRunner(runner = new runner_1.Runner()) {
+        this.runnerList.push(runner);
     }
 }
 __decorate([
@@ -24377,13 +24385,13 @@ __decorate([
     @_Postman_:
 */
 const _postman = new Postman();
-console.log((0, class_transformer_1.instanceToPlain)(_postman));
+// console.log(instanceToPlain(_postman));
 console.log('HELLO POSTMAN with version => ', Postman.version);
 // @ts-ignore
 _postman_ = _postman;
 // @ts-ignore
 _Postman_ = Postman;
-// @ts-ignore 
+// @ts-ignore
 __VERSION__ = Postman.version;
 
 
@@ -24614,18 +24622,16 @@ const faker_1 = __importDefault(__webpack_require__(/*! ./faker */ "./src/utils/
 class Variable {
     constructor() { }
     static get(key) {
+        console.log('get', key);
         if (pm?.collectionVariables?.get) {
             return pm?.collectionVariables?.get(key);
         }
         return undefined;
     }
     static set(key, value, type) {
+        console.log('set', key, value, pm?.collectionVariables?.set);
         if (pm?.collectionVariables?.set) {
-            let _v = value;
-            if (typeof value === 'object') {
-                _v = JSON.stringify(value);
-            }
-            pm?.collectionVariables?.set(key, _v, type);
+            pm?.collectionVariables?.set(key, value);
         }
     }
     static context = {

@@ -92,7 +92,7 @@ module.exports = {
                             `node ${path.resolve(
                                 __dirname,
                                 './bin/postBuild.js',
-                            )}`,
+                            )} --mode development`,
                             (err, stdout, stderr) => {
                                 if (err) {
                                     console.error(err);

@@ -3,7 +3,10 @@ const path = require('path');
 const minmist = require('minimist');
 
 let filePath = path.resolve(__dirname, '../scripts/postman.bundle.js');
-const newText = 'var _Postman_ = {};\n';
+const newText = `var pm = {};\nvar _postman_ = {};\n
+var _Postman_ = {};\n
+var _serializer = {};\n
+var __VERSION__ = '';`;
 
 function makePostmanIsGlobal() {
     const params = minmist(process.argv);
@@ -17,7 +20,7 @@ function makePostmanIsGlobal() {
             return;
         }
 
-        const updatedContent = newText + data;
+        const updatedContent = `${newText} ${data}`;
 
         fs.writeFile(filePath, updatedContent, 'utf8', (err) => {
             if (err) {

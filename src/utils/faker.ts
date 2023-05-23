@@ -1,6 +1,6 @@
 export default {
     email: function () {
-        return pm.variables.replaceIn('{{$randomEmail}}');
+        return pm?.variables?.replaceIn('{{$randomEmail}}');
     },
 };
 

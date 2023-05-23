@@ -4,7 +4,7 @@ var _Postman_ = {};
 
 var _serializer = {};
 
-var __VERSION__ = "2023-05-23T11:21:36.010Z"; /******/ (() => { // webpackBootstrap
+var __VERSION__ = "2023-05-23T11:27:57.237Z"; /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./node_modules/class-transformer/esm5/ClassTransformer.js":
@@ -24124,6 +24124,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Request = void 0;
 const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
 const postman_1 = __webpack_require__(/*! ../lib/postman */ "./src/lib/postman.ts");
+const pm = {};
 const request = {
     addParam: function (key, value) {
         // pm.request.addQueryParams([{ key, value } as any]);
@@ -24251,7 +24252,6 @@ class X {
     }
 }
 exports.X = X;
-var pm = {};
 class Postman {
     constructor() { }
     static version = `${new Date().toISOString()}`;
@@ -24348,7 +24348,6 @@ __decorate([
 //     console.log(x);
 // });
 // const m = new X();
-// console.log(instanceToPlain(postman));
 // console.log(
 //     plainToInstance(Postman, {
 //         Tester: {},
@@ -24378,6 +24377,7 @@ __decorate([
     @_Postman_:
 */
 const _postman = new Postman();
+console.log((0, class_transformer_1.instanceToPlain)(_postman));
 console.log('HELLO POSTMAN with version => ', Postman.version);
 // @ts-ignore
 _postman_ = _postman;

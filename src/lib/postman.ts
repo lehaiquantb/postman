@@ -23,7 +23,6 @@ export class X {
     }
 }
 
-var pm: any = {};
 
 class Postman {
     constructor() {}
@@ -132,7 +131,6 @@ class Postman {
 // });
 // const m = new X();
 
-// console.log(instanceToPlain(postman));
 // console.log(
 //     plainToInstance(Postman, {
 //         Tester: {},
@@ -164,6 +162,7 @@ class Postman {
     @_Postman_:
 */
 const _postman = new Postman();
+console.log(instanceToPlain(_postman));
 
 console.log('HELLO POSTMAN with version => ', Postman.version);
 

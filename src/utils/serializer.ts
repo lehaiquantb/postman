@@ -1,4 +1,4 @@
-import { X } from '../lib/postman';
+import { X } from '../lib/postwoman';
 
 type InstanceType = {
     key: string;

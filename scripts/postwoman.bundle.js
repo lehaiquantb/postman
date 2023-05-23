@@ -1,10 +1,10 @@
-var _postman_ = {};
+var _postwoman_ = {};
 
-var _Postman_ = {};
+var _Postwoman_ = {};
 
 var _serializer = {};
 
-var __VERSION__ = "2023-05-23T12:21:07.397Z";var pm = {};
+var __VERSION__ = "2023-05-23T18:38:27.366Z";var pm = {};
  /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -24124,7 +24124,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Request = void 0;
 const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
-const postman_1 = __webpack_require__(/*! ../lib/postman */ "./src/lib/postman.ts");
+const postwoman_1 = __webpack_require__(/*! ../lib/postwoman */ "./src/lib/postwoman.ts");
 const request = {
     addParam: function (key, value) {
         // pm.request.addQueryParams([{ key, value } as any]);
@@ -24139,10 +24139,10 @@ class Request {
         return new Request();
     }
     ax = pm?.collectionVariables?.get('a');
-    rrr = new postman_1.X();
+    rrr = new postwoman_1.X();
 }
 __decorate([
-    (0, class_transformer_1.Type)(() => postman_1.X)
+    (0, class_transformer_1.Type)(() => postwoman_1.X)
 ], Request.prototype, "rrr", void 0);
 exports.Request = Request;
 exports["default"] = request;
@@ -24192,10 +24192,10 @@ exports["default"] = tester;
 
 /***/ }),
 
-/***/ "./src/lib/postman.ts":
-/*!****************************!*\
-  !*** ./src/lib/postman.ts ***!
-  \****************************/
+/***/ "./src/lib/postwoman.ts":
+/*!******************************!*\
+  !*** ./src/lib/postwoman.ts ***!
+  \******************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24245,6 +24245,7 @@ const request_1 = __importStar(__webpack_require__(/*! ../collections/request */
 const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
 const runner_1 = __webpack_require__(/*! ../collections/runner */ "./src/collections/runner.ts");
 const constants_1 = __importDefault(__webpack_require__(/*! ../utils/constants */ "./src/utils/constants.ts"));
+const VERSION = __VERSION__ || `${new Date().toISOString()}`;
 class X {
     v = 1;
     constructor() {
@@ -24252,9 +24253,26 @@ class X {
     }
 }
 exports.X = X;
-class Postman {
-    constructor() { }
-    static version = `${new Date().toISOString()}`;
+const Test = {
+    set(key, value) {
+        pm.collectionVariables.set(key, value);
+    },
+};
+class Postwoman {
+    constructor(props) {
+        this.init(props);
+    }
+    init(props) {
+        this.postman = props?.pm;
+        if (this.variable) {
+            this.variable?.init({ postman: props?.pm });
+        }
+        else {
+            this.variable = new variable_1.Variable({ postman: props?.pm });
+        }
+    }
+    postman;
+    version = VERSION;
     // test(jsonString?: string) {
     //     forEach(this, (value: any, key: string) => {
     //         console.log(key, value);
@@ -24270,8 +24288,8 @@ class Postman {
     //     });
     //     return JSON.stringify(this);
     // }
-    // deserialize(jsonString?: string): Postman {
-    //     const instance = new Postman();
+    // deserialize(jsonString?: string): Postwoman {
+    //     const instance = new Postwoman();
     //     const obj = helper.parseJson(jsonString);
     //     forEach(this, (value: any, key: string) => {
     //         const me: any = this;
@@ -24284,7 +24302,7 @@ class Postman {
     static Helper = helper_1.default;
     Moment = moment_1.default;
     static Constants = constants_1.default;
-    variable = new variable_1.Variable();
+    variable;
     runnerList = [];
     // @Exclude()
     Tester = tester_1.default;
@@ -24297,34 +24315,33 @@ class Postman {
     // showX() {
     //     console.log(this.xs);
     // }
-    snapShot(_pm) {
-        const postmanObj = (0, class_transformer_1.instanceToPlain)(_pm ?? this);
-        console.log(Postman.version);
-        pm?.collectionVariables?.set('POSTMAN_PLAIN', 'ád', 'String');
-        console.log(pm?.collectionVariables?.get('xxx'));
+    snapShot(_pw) {
+        const me = _pw ?? this;
+        const postwomanObj = (0, class_transformer_1.instanceToPlain)(me);
+        me?.variable?.set(Postwoman.Constants.CKey.POSTWOMAN_PLAIN, postwomanObj);
     }
-    static init() {
-        let postman;
-        const postmanPlain = pm?.collectionVariables?.get(Postman.Constants.CKey.POSTMAN_PLAIN);
-        console.log('postmanPlain', postmanPlain);
-        const postmanObj = Postman.Helper.parseJson(postmanPlain) ?? {};
+    static create(_pm) {
+        let postwoman;
+        const postwomanPlain = _pm?.collectionVariables?.get(Postwoman.Constants.CKey.POSTWOMAN_PLAIN);
+        const postwomanObj = Postwoman.Helper.parseJson(postwomanPlain) ?? {};
         // @ts-ignore
-        if (__VERSION__ !== postmanObj?.version) {
-            postman = new Postman();
-            // Variable.set(
-            //     Postman.Constants.CKey.POSTMAN_PLAIN,
-            //     instanceToPlain(postman),
+        if (__VERSION__ !== postwomanObj?.version) {
+            postwoman = new Postwoman({ pm: _pm });
+            // postwoman.variable.set(
+            //     Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
+            //     instanceToPlain(postwoman),
             // );
         }
         else {
-            postman = (0, class_transformer_1.plainToInstance)(Postman, postmanObj);
+            postwoman = (0, class_transformer_1.plainToInstance)(Postwoman, postwomanObj);
+            postwoman.init({ pm: _pm });
         }
-        return postman;
+        return postwoman;
     }
-    static onPreRequest(callback) {
-        const _p = Postman.init();
-        callback(_p);
-        _p.snapShot(_p);
+    static onPreRequest(__pm, callback) {
+        const pw = Postwoman.create(__pm);
+        callback(pw);
+        pw.snapShot(pw);
     }
     addRunner(runner = new runner_1.Runner()) {
         this.runnerList.push(runner);
@@ -24332,32 +24349,38 @@ class Postman {
 }
 __decorate([
     (0, class_transformer_1.Exclude)()
-], Postman.prototype, "Faker", void 0);
+], Postwoman.prototype, "postman", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)()
-], Postman.prototype, "Moment", void 0);
+], Postwoman.prototype, "Faker", void 0);
+__decorate([
+    (0, class_transformer_1.Exclude)()
+], Postwoman.prototype, "Moment", void 0);
+__decorate([
+    (0, class_transformer_1.Type)(() => variable_1.Variable)
+], Postwoman.prototype, "variable", void 0);
 __decorate([
     (0, class_transformer_1.Type)(() => runner_1.Runner)
-], Postman.prototype, "runnerList", void 0);
+], Postwoman.prototype, "runnerList", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)()
-], Postman.prototype, "Request", void 0);
+], Postwoman.prototype, "Request", void 0);
 __decorate([
     (0, class_transformer_1.Type)(() => request_1.Request)
-], Postman.prototype, "currentRequest", void 0);
+], Postwoman.prototype, "currentRequest", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)()
-], Postman, "Helper", void 0);
+], Postwoman, "Helper", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)()
-], Postman, "Constants", void 0);
-// forEach(postman, (x, key, p) => {
+], Postwoman, "Constants", void 0);
+// forEach(postwoman, (x, key, p) => {
 //     // debugger;
 //     console.log(x);
 // });
 // const m = new X();
 // console.log(
-//     plainToInstance(Postman, {
+//     plainToInstance(Postwoman, {
 //         Tester: {},
 //         currentRequest: {
 //             rrr: {
@@ -24384,15 +24407,22 @@ __decorate([
 /*
     @_Postman_:
 */
-const _postman = new Postman();
-// console.log(instanceToPlain(_postman));
-console.log('HELLO POSTMAN with version => ', Postman.version);
+// const _postwoman = Postwoman.Helper.plainToInstance(
+//     Postwoman,
+//     Postwoman.Helper.parseJson(
+//         `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{}},"runnerList":[{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}}}`,
+//     ),
+// );
+const _postwoman = (0, class_transformer_1.plainToInstance)(Postwoman, Postwoman.Helper.parseJson(`{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{"a":1}},"runnerList":[{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}}}`));
+// const _postwoman = new Postwoman({ pm: {} });
+// console.log(instanceToPlain(_postwoman));
+console.log('HELLO POSTMAN with version => ', VERSION);
 // @ts-ignore
-_postman_ = _postman;
+_postwoman_ = _postwoman;
 // @ts-ignore
-_Postman_ = Postman;
+_Postwoman_ = Postwoman;
 // @ts-ignore
-__VERSION__ = Postman.version;
+__VERSION__ = VERSION;
 
 
 /***/ }),
@@ -24548,7 +24578,7 @@ moment_1.default.fn.fmDateMonthJp = function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 var CKey;
 (function (CKey) {
-    CKey["POSTMAN_PLAIN"] = "POSTMAN_PLAIN";
+    CKey["POSTWOMAN_PLAIN"] = "POSTWOMAN_PLAIN";
 })(CKey || (CKey = {}));
 exports["default"] = { CKey };
 
@@ -24594,11 +24624,19 @@ function parseJson(jsonString) {
         return undefined;
     }
 }
+function set(key, value) {
+    pm.collectionVariables.set(key, value);
+}
+function get(key) {
+    return pm.collectionVariables.get(key);
+}
 exports["default"] = {
     sayHello,
     parseJson,
     plainToInstance: class_transformer_1.plainToInstance,
     instanceToPlain: class_transformer_1.instanceToPlain,
+    set,
+    get,
 };
 
 
@@ -24612,6 +24650,12 @@ exports["default"] = {
 
 "use strict";
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -24619,19 +24663,31 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Variable = void 0;
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 const faker_1 = __importDefault(__webpack_require__(/*! ./faker */ "./src/utils/faker.ts"));
+const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
 class Variable {
-    constructor() { }
-    static get(key) {
+    constructor(props) {
+        this.init(props);
+    }
+    init(props) {
+        this.postman = props?.postman;
+    }
+    postman;
+    get(key) {
         console.log('get', key);
-        if (pm?.collectionVariables?.get) {
-            return pm?.collectionVariables?.get(key);
+        if (this.postman?.collectionVariables?.get) {
+            return this.postman?.collectionVariables?.get(key);
         }
         return undefined;
     }
-    static set(key, value, type) {
-        console.log('set', key, value, pm?.collectionVariables?.set);
-        if (pm?.collectionVariables?.set) {
-            pm?.collectionVariables?.set(key, value);
+    set(key, value, type) {
+        console.log('set', key, value, this.postman?.collectionVariables?.set);
+        if (this.postman?.collectionVariables?.set) {
+            if (typeof value === 'string') {
+                this.postman?.collectionVariables?.set(key, value);
+            }
+            else {
+                this.postman?.collectionVariables?.set(key, JSON.stringify(value));
+            }
         }
     }
     static context = {
@@ -24682,6 +24738,9 @@ class Variable {
         // console.log('generateVariables');
     }
 }
+__decorate([
+    (0, class_transformer_1.Exclude)()
+], Variable.prototype, "postman", void 0);
 exports.Variable = Variable;
 
 
@@ -24771,8 +24830,8 @@ exports.Variable = Variable;
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/lib/postman.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/lib/postwoman.ts");
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=postman.bundle.js.map
+//# sourceMappingURL=postwoman.bundle.js.map

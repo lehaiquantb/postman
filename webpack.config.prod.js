@@ -2,12 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const { exec } = require('child_process');
-const postmanPath = path.join(__dirname, './src/lib/postman.ts');
+const postwomanPath = path.join(__dirname, './src/lib/postwoman.ts');
 
 module.exports = {
     devtool: 'cheap-module-source-map',
     entry: {
-        postman: postmanPath,
+        postwoman: postwomanPath,
     },
     output: {
         path: path.join(__dirname, './scripts'), // Thư mục chứa file được build ra

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { X } from '../lib/postman';
+import { X } from '../lib/postwoman';
 import { Serializable } from '../@types/index';
 
 

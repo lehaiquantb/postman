@@ -1,21 +1,42 @@
 import moment from 'moment';
 import faker from './faker';
+import { Exclude } from 'class-transformer';
+
+type VariableProps = {
+    postman?: Postman;
+};
 
 export class Variable {
-    constructor() {}
+    constructor(props?: VariableProps) {
+        this.init(props);
+    }
 
-    static get(key: string): any {
+    init(props?: VariableProps) {
+        this.postman = props?.postman;
+    }
+
+    @Exclude()
+    postman: Postman | undefined;
+
+    public get(key: string): any {
         console.log('get', key);
-        if (pm?.collectionVariables?.get) {
-            return pm?.collectionVariables?.get(key);
+        if (this.postman?.collectionVariables?.get) {
+            return this.postman?.collectionVariables?.get(key);
         }
         return undefined;
     }
 
-    static set(key: string, value: any, type?: any): void {
-        console.log('set', key, value, pm?.collectionVariables?.set);
-        if (pm?.collectionVariables?.set) {
-            pm?.collectionVariables?.set(key, value);
+    public set(key: string, value: any, type?: any): void {
+        console.log('set', key, value, this.postman?.collectionVariables?.set);
+        if (this.postman?.collectionVariables?.set) {
+            if (typeof value === 'string') {
+                this.postman?.collectionVariables?.set(key, value);
+            } else {
+                this.postman?.collectionVariables?.set(
+                    key,
+                    JSON.stringify(value),
+                );
+            }
         }
     }
 

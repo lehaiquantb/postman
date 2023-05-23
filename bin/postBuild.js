@@ -2,17 +2,17 @@ const fs = require('fs');
 const path = require('path');
 const minmist = require('minimist');
 
-let filePath = path.resolve(__dirname, '../scripts/postman.bundle.js');
-let newText = `var _postman_ = {};\n
-var _Postman_ = {};\n
+let filePath = path.resolve(__dirname, '../scripts/postwoman.bundle.js');
+let newText = `var _postwoman_ = {};\n
+var _Postwoman_ = {};\n
 var _serializer = {};\n
 var __VERSION__ = "${new Date().toISOString()}";`;
 
-function makePostmanIsGlobal() {
+function makePostwomanIsGlobal() {
     const params = minmist(process.argv);
     const { mode } = params;
     if (mode === 'production') {
-        filePath = path.resolve(__dirname, '../scripts/postman.min.js');
+        filePath = path.resolve(__dirname, '../scripts/postwoman.min.js');
     }
     if (mode == 'development') {
         newText += `var pm = {};\n`;
@@ -38,4 +38,4 @@ function makePostmanIsGlobal() {
     });
 }
 
-makePostmanIsGlobal();
+makePostwomanIsGlobal();

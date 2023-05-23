@@ -11,9 +11,19 @@ function parseJson(jsonString?: string): Record<string, any> | undefined {
     }
 }
 
+function set(key: string, value: any) {
+    pm.collectionVariables.set(key, value);
+}
+
+function get(key: string): any {
+    return pm.collectionVariables.get(key);
+}
+
 export default {
     sayHello,
     parseJson,
     plainToInstance,
     instanceToPlain,
+    set,
+    get,
 };

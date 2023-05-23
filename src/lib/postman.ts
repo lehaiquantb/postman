@@ -23,6 +23,8 @@ export class X {
     }
 }
 
+var pm: any = {};
+
 class Postman {
     constructor() {}
 
@@ -171,5 +173,5 @@ _postman_ = _postman;
 // @ts-ignore
 _Postman_ = Postman;
 
-// @ts-ignore
+// @ts-ignore 
 __VERSION__ = Postman.version;

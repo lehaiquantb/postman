@@ -3,7 +3,7 @@ const path = require('path');
 const minmist = require('minimist');
 
 let filePath = path.resolve(__dirname, '../scripts/postman.bundle.js');
-const newText = `var pm = {};\nvar _postman_ = {};\n
+const newText = `var _postman_ = {};\n
 var _Postman_ = {};\n
 var _serializer = {};\n
 var __VERSION__ = "${new Date().toISOString()}";`;

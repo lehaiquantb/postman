@@ -1,11 +1,10 @@
-var pm = {};
 var _postman_ = {};
 
 var _Postman_ = {};
 
 var _serializer = {};
 
-var __VERSION__ = ''; /******/ (() => { // webpackBootstrap
+var __VERSION__ = "2023-05-23T11:21:36.010Z"; /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./node_modules/class-transformer/esm5/ClassTransformer.js":
@@ -24252,6 +24251,7 @@ class X {
     }
 }
 exports.X = X;
+var pm = {};
 class Postman {
     constructor() { }
     static version = `${new Date().toISOString()}`;
@@ -24383,7 +24383,7 @@ console.log('HELLO POSTMAN with version => ', Postman.version);
 _postman_ = _postman;
 // @ts-ignore
 _Postman_ = Postman;
-// @ts-ignore
+// @ts-ignore 
 __VERSION__ = Postman.version;
 
 

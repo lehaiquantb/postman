@@ -24245,7 +24245,6 @@ const request_1 = __importStar(__webpack_require__(/*! ../collections/request */
 const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
 const runner_1 = __webpack_require__(/*! ../collections/runner */ "./src/collections/runner.ts");
 const constants_1 = __importDefault(__webpack_require__(/*! ../utils/constants */ "./src/utils/constants.ts"));
-console.log('HELLO POSTMAN at', (0, moment_1.default)().format('YYYY-MM-DD'));
 class X {
     v = 1;
     constructor() {
@@ -24308,7 +24307,7 @@ class Postman {
         const postmanPlain = pm?.collectionVariables?.get(Postman.Constants.CKey.POSTMAN_PLAIN);
         const postmanObj = Postman.Helper.parseJson(postmanPlain) ?? {};
         // @ts-ignore
-        if (__VERSION__ === postmanObj?.version) {
+        if (__VERSION__ !== postmanObj?.version) {
             postman = new Postman();
             variable_1.Variable.set(Postman.Constants.CKey.POSTMAN_PLAIN, (0, class_transformer_1.instanceToPlain)(postman));
         }
@@ -24321,7 +24320,6 @@ class Postman {
         const postman = Postman.init();
         callback(postman);
         postman.snapShot();
-        // console.log(Postman.version);
     }
 }
 __decorate([
@@ -24380,6 +24378,7 @@ __decorate([
     @_Postman_:
 */
 const _postman = new Postman();
+console.log('HELLO POSTMAN version', Postman.version);
 // @ts-ignore
 _postman_ = _postman;
 // @ts-ignore

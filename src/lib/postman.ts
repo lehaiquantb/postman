@@ -16,7 +16,6 @@ import {
 import { Runner } from '../collections/runner';
 import constants from '../utils/constants';
 
-console.log('HELLO POSTMAN at', moment().format('YYYY-MM-DD'));
 export class X {
     v = 1;
     constructor() {
@@ -105,7 +104,7 @@ class Postman {
         );
         const postmanObj = Postman.Helper.parseJson(postmanPlain) ?? {};
         // @ts-ignore
-        if (__VERSION__ === postmanObj?.version) {
+        if (__VERSION__ !== postmanObj?.version) {
             postman = new Postman();
             Variable.set(
                 Postman.Constants.CKey.POSTMAN_PLAIN,
@@ -122,7 +121,6 @@ class Postman {
         const postman = Postman.init();
         callback(postman);
         postman.snapShot();
-        // console.log(Postman.version);
     }
 }
 
@@ -164,6 +162,8 @@ class Postman {
     @_Postman_:
 */
 const _postman = new Postman();
+
+console.log('HELLO POSTMAN version', Postman.version);
 
 // @ts-ignore
 _postman_ = _postman;

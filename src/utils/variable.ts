@@ -1,25 +1,18 @@
 import moment from 'moment';
 import faker from './faker';
-import { Exclude } from 'class-transformer';
+import { Base } from '../lib/base';
 
 type VariableProps = {
     postman?: Postman;
 };
 
-export class Variable {
+export class Variable extends Base {
     constructor(props?: VariableProps) {
+        super(props);
         this.init(props);
     }
 
-    init(props?: VariableProps) {
-        this.postman = props?.postman;
-    }
-
-    @Exclude()
-    postman: Postman | undefined;
-
     public get(key: string): any {
-        console.log('get', key);
         if (this.postman?.collectionVariables?.get) {
             return this.postman?.collectionVariables?.get(key);
         }
@@ -27,7 +20,6 @@ export class Variable {
     }
 
     public set(key: string, value: any, type?: any): void {
-        console.log('set', key, value, this.postman?.collectionVariables?.set);
         if (this.postman?.collectionVariables?.set) {
             if (typeof value === 'string') {
                 this.postman?.collectionVariables?.set(key, value);

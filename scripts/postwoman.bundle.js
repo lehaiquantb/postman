@@ -4,7 +4,7 @@ var _Postwoman_ = {};
 
 var _serializer = {};
 
-var __VERSION__ = "2023-05-23T18:38:27.366Z";var pm = {};
+var __VERSION__ = "2023-05-28T17:22:35.414Z";var pm = {};
  /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -24107,49 +24107,6 @@ var Reflect;
 
 /***/ }),
 
-/***/ "./src/collections/request.ts":
-/*!************************************!*\
-  !*** ./src/collections/request.ts ***!
-  \************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Request = void 0;
-const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
-const postwoman_1 = __webpack_require__(/*! ../lib/postwoman */ "./src/lib/postwoman.ts");
-const request = {
-    addParam: function (key, value) {
-        // pm.request.addQueryParams([{ key, value } as any]);
-        // pm.request.url
-    },
-};
-class Request {
-    serialize() {
-        return 'pm.request.url';
-    }
-    deserialize(value) {
-        return new Request();
-    }
-    ax = pm?.collectionVariables?.get('a');
-    rrr = new postwoman_1.X();
-}
-__decorate([
-    (0, class_transformer_1.Type)(() => postwoman_1.X)
-], Request.prototype, "rrr", void 0);
-exports.Request = Request;
-exports["default"] = request;
-
-
-/***/ }),
-
 /***/ "./src/collections/runner.ts":
 /*!***********************************!*\
   !*** ./src/collections/runner.ts ***!
@@ -24192,6 +24149,48 @@ exports["default"] = tester;
 
 /***/ }),
 
+/***/ "./src/lib/base.ts":
+/*!*************************!*\
+  !*** ./src/lib/base.ts ***!
+  \*************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Base = void 0;
+const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
+let Base = class Base {
+    constructor(props) {
+        this.init(props);
+    }
+    postman;
+    postwoman;
+    init(props) {
+        this.postman = props?.postman;
+        this.postwoman = props?.postwoman;
+    }
+};
+__decorate([
+    (0, class_transformer_1.Exclude)()
+], Base.prototype, "postman", void 0);
+__decorate([
+    (0, class_transformer_1.Exclude)()
+], Base.prototype, "postwoman", void 0);
+Base = __decorate([
+    (0, class_transformer_1.Exclude)()
+], Base);
+exports.Base = Base;
+
+
+/***/ }),
+
 /***/ "./src/lib/postwoman.ts":
 /*!******************************!*\
   !*** ./src/lib/postwoman.ts ***!
@@ -24200,51 +24199,28 @@ exports["default"] = tester;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.X = void 0;
-__webpack_require__(/*! reflect-metadata */ "./node_modules/reflect-metadata/Reflect.js");
-__webpack_require__(/*! ../plugins/moment/extendMoment */ "./src/plugins/moment/extendMoment.ts");
-const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
-const helper_1 = __importDefault(__webpack_require__(/*! ../utils/helper */ "./src/utils/helper.ts"));
-const faker_1 = __importDefault(__webpack_require__(/*! ../utils/faker */ "./src/utils/faker.ts"));
-const variable_1 = __webpack_require__(/*! ../utils/variable */ "./src/utils/variable.ts");
-const tester_1 = __importDefault(__webpack_require__(/*! ../collections/tester */ "./src/collections/tester.ts"));
-const request_1 = __importStar(__webpack_require__(/*! ../collections/request */ "./src/collections/request.ts"));
+exports.Postwoman = exports.X = void 0;
 const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
+const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
+__webpack_require__(/*! reflect-metadata */ "./node_modules/reflect-metadata/Reflect.js");
 const runner_1 = __webpack_require__(/*! ../collections/runner */ "./src/collections/runner.ts");
+const tester_1 = __importDefault(__webpack_require__(/*! ../collections/tester */ "./src/collections/tester.ts"));
+__webpack_require__(/*! ../plugins/moment/extendMoment */ "./src/plugins/moment/extendMoment.ts");
 const constants_1 = __importDefault(__webpack_require__(/*! ../utils/constants */ "./src/utils/constants.ts"));
+const faker_1 = __importDefault(__webpack_require__(/*! ../utils/faker */ "./src/utils/faker.ts"));
+const helper_1 = __importDefault(__webpack_require__(/*! ../utils/helper */ "./src/utils/helper.ts"));
+const variable_1 = __webpack_require__(/*! ../utils/variable */ "./src/utils/variable.ts");
+const base_1 = __webpack_require__(/*! ./base */ "./src/lib/base.ts");
 const VERSION = __VERSION__ || `${new Date().toISOString()}`;
 class X {
     v = 1;
@@ -24258,56 +24234,54 @@ const Test = {
         pm.collectionVariables.set(key, value);
     },
 };
-class Postwoman {
+class Postwoman extends base_1.Base {
     constructor(props) {
+        super(props);
         this.init(props);
     }
-    init(props) {
-        this.postman = props?.pm;
-        if (this.variable) {
-            this.variable?.init({ postman: props?.pm });
-        }
-        else {
-            this.variable = new variable_1.Variable({ postman: props?.pm });
-        }
+    afterInit() {
+        [this.variable].forEach((item) => {
+            if (item) {
+                item.postwoman = this;
+            }
+        });
     }
-    postman;
     version = VERSION;
-    // test(jsonString?: string) {
-    //     forEach(this, (value: any, key: string) => {
-    //         console.log(key, value);
-    //         console.log((this as any)[key]);
-    //     });
-    //     // return JSON.parse(jsonString);
-    // }
-    // serialize(): string {
-    //     const me = this as any;
-    //     const obj = JSON.parse(JSON.stringify(me));
-    //     forEach(obj, (key, value) => {
-    //         me[key];
-    //     });
-    //     return JSON.stringify(this);
-    // }
-    // deserialize(jsonString?: string): Postwoman {
-    //     const instance = new Postwoman();
-    //     const obj = helper.parseJson(jsonString);
-    //     forEach(this, (value: any, key: string) => {
-    //         const me: any = this;
-    //         if (me) {
-    //         }
-    //     });
-    //     return JSON.parse(jsonString);
-    // }
     Faker = faker_1.default;
     static Helper = helper_1.default;
     Moment = moment_1.default;
     static Constants = constants_1.default;
     variable;
-    runnerList = [];
+    // @Type(() => Runner)
+    // runnerList: Runner[] = [];
     // @Exclude()
     Tester = tester_1.default;
-    Request = request_1.default;
-    currentRequest = new request_1.Request();
+    // @Type(() => PWRequest)
+    // @Exclude()
+    // @Transform((value: any) => {
+    //     // const postman = this.postman;
+    //     // eval(`(function() {
+    //     //     const sdk = require('postman-collection');
+    //     //     const newRequest = new sdk.Request(postman.request.toJSON());
+    //     //     return newRequest;
+    //     //     })()
+    //     // `);
+    //     // return new X();
+    //     console.log('transform', value);
+    // })
+    // @Transform(
+    //     (params: TransformFnParams) => {
+    //         const postman = (params?.options as any)?.extraData?.pm as Postman;
+    //         return eval(`(function() {
+    //             const sdk = require('postman-collection');
+    //             const newRequest = new sdk.Request(postman.request.toJSON());
+    //             return newRequest;
+    //             })()
+    //         `);
+    //     },
+    //     { toPlainOnly: true },
+    // )
+    currentRequest;
     // xs: X[] = [new X()];
     // addX() {
     //     this.xs.push(new X());
@@ -24316,40 +24290,78 @@ class Postwoman {
     //     console.log(this.xs);
     // }
     snapShot(_pw) {
-        const me = _pw ?? this;
-        const postwomanObj = (0, class_transformer_1.instanceToPlain)(me);
-        me?.variable?.set(Postwoman.Constants.CKey.POSTWOMAN_PLAIN, postwomanObj);
+        try {
+            const me = _pw ?? this;
+            const postwomanObj = (0, class_transformer_1.instanceToPlain)(me);
+            me?.variable?.set?.(Postwoman.Constants.CKey.POSTWOMAN_PLAIN, postwomanObj);
+        }
+        catch (error) {
+            console.error('snapShot', error);
+        }
+    }
+    snapShotCurrentRequest() {
+        // this.postman.request.
+        // const me = this;
+        // const postwomanObj = instanceToPlain(me.currentRequest);
+        // me?.variable?.set(
+        //     Postwoman.Constants.CKey.CURRENT_REQUEST_PLAIN,
+        //     postwomanObj,
+        // );
     }
     static create(_pm) {
-        let postwoman;
-        const postwomanPlain = _pm?.collectionVariables?.get(Postwoman.Constants.CKey.POSTWOMAN_PLAIN);
-        const postwomanObj = Postwoman.Helper.parseJson(postwomanPlain) ?? {};
-        // @ts-ignore
-        if (__VERSION__ !== postwomanObj?.version) {
-            postwoman = new Postwoman({ pm: _pm });
-            // postwoman.variable.set(
-            //     Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
-            //     instanceToPlain(postwoman),
-            // );
+        try {
+            let postwoman;
+            const postwomanPlain = _pm?.collectionVariables?.get(Postwoman.Constants.CKey.POSTWOMAN_PLAIN);
+            const postwomanObj = Postwoman.Helper.parseJson(postwomanPlain) ?? {};
+            console.log('postwomanObj', postwomanObj);
+            postwoman = (0, class_transformer_1.plainToInstance)(Postwoman, postwomanObj, {
+                extraData: { postman: _pm, postwoman },
+            });
+            postwoman.init({ postman: _pm });
+            postwoman.afterInit();
+            // @ts-ignore
+            // if (__VERSION__ !== postwomanObj?.version) {
+            //     // postwoman = new Postwoman({ pm: _pm });
+            //     postwoman = plainToInstance(Postwoman, postwomanObj);
+            //     postwoman.init({ pm: _pm });
+            //     // postwoman.variable.set(
+            //     //     Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
+            //     //     instanceToPlain(postwoman),
+            //     // );
+            // } else {
+            //     postwoman = plainToInstance(Postwoman, postwomanObj);
+            //     postwoman.init({ pm: _pm });
+            // }
+            return postwoman;
         }
-        else {
-            postwoman = (0, class_transformer_1.plainToInstance)(Postwoman, postwomanObj);
-            postwoman.init({ pm: _pm });
+        catch (error) {
+            console.error('create', error);
         }
-        return postwoman;
     }
-    static onPreRequest(__pm, callback) {
-        const pw = Postwoman.create(__pm);
-        callback(pw);
-        pw.snapShot(pw);
+    static async onProcess(options, callback) {
+        try {
+            const pw = Postwoman.create(options?.pm);
+            await callback({ pw });
+            pw.snapShot(pw);
+        }
+        catch (error) {
+            console.error('onProcess', error);
+        }
+    }
+    static async onPreRequest(opts, callback) {
+        Postwoman.onProcess(opts, async (opts) => {
+            return await callback(opts.pw);
+        });
+    }
+    static async onCollectionTest(_opts, callback) {
+        Postwoman.onProcess(_opts, async (opts) => {
+            return await callback(opts.pw);
+        });
     }
     addRunner(runner = new runner_1.Runner()) {
-        this.runnerList.push(runner);
+        // this.runnerList.push(runner);
     }
 }
-__decorate([
-    (0, class_transformer_1.Exclude)()
-], Postwoman.prototype, "postman", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)()
 ], Postwoman.prototype, "Faker", void 0);
@@ -24357,16 +24369,41 @@ __decorate([
     (0, class_transformer_1.Exclude)()
 ], Postwoman.prototype, "Moment", void 0);
 __decorate([
-    (0, class_transformer_1.Type)(() => variable_1.Variable)
+    (0, class_transformer_1.Expose)(),
+    (0, class_transformer_1.Transform)((params) => {
+        console.log('transform', params);
+        return Postwoman.Helper.convertToInstance(variable_1.Variable, params?.value, params?.options?.extraData);
+    }, { toClassOnly: true })
 ], Postwoman.prototype, "variable", void 0);
 __decorate([
-    (0, class_transformer_1.Type)(() => runner_1.Runner)
-], Postwoman.prototype, "runnerList", void 0);
-__decorate([
-    (0, class_transformer_1.Exclude)()
-], Postwoman.prototype, "Request", void 0);
-__decorate([
-    (0, class_transformer_1.Type)(() => request_1.Request)
+    (0, class_transformer_1.Expose)(),
+    (0, class_transformer_1.Transform)((params) => {
+        const postman = params?.options?.extraData
+            ?.postman;
+        console.log('transform var', params);
+        return eval(`(function() {
+                const sdk = require('postman-collection');
+                if(!postman?.request){
+                    return undefined;        
+                }
+                const newRequest = new sdk.Request(postman?.request?.toJSON());
+                return newRequest;
+                })()
+            `);
+    }, { toClassOnly: true }),
+    (0, class_transformer_1.Exclude)({ toPlainOnly: true })
+    // @Transform(
+    //     (params: TransformFnParams) => {
+    //         const postman = (params?.options as any)?.extraData?.pm as Postman;
+    //         return eval(`(function() {
+    //             const sdk = require('postman-collection');
+    //             const newRequest = new sdk.Request(postman.request.toJSON());
+    //             return newRequest;
+    //             })()
+    //         `);
+    //     },
+    //     { toPlainOnly: true },
+    // )
 ], Postwoman.prototype, "currentRequest", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)()
@@ -24374,6 +24411,7 @@ __decorate([
 __decorate([
     (0, class_transformer_1.Exclude)()
 ], Postwoman, "Constants", void 0);
+exports.Postwoman = Postwoman;
 // forEach(postwoman, (x, key, p) => {
 //     // debugger;
 //     console.log(x);
@@ -24413,7 +24451,14 @@ __decorate([
 //         `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{}},"runnerList":[{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}}}`,
 //     ),
 // );
-const _postwoman = (0, class_transformer_1.plainToInstance)(Postwoman, Postwoman.Helper.parseJson(`{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{"a":1}},"runnerList":[{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}}}`));
+const pObj = Postwoman.Helper.parseJson(`{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{"a":1}},"runnerList":
+    [{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}},"xxx":{}}`);
+pObj.h = function () {
+    console.log('hello');
+};
+// const _postwoman = {};
+const _postwoman = (0, class_transformer_1.plainToInstance)(Postwoman, { variable: { a: {} }, pm: {} });
+// console.log(_postwoman);
 // const _postwoman = new Postwoman({ pm: {} });
 // console.log(instanceToPlain(_postwoman));
 console.log('HELLO POSTMAN with version => ', VERSION);
@@ -24624,19 +24669,50 @@ function parseJson(jsonString) {
         return undefined;
     }
 }
+function varIsExist(varName) {
+    try {
+        return eval(`typeof ${varName}`) !== 'undefined';
+    }
+    catch (error) {
+        // console.log('varIsExist', error);
+        return false;
+    }
+}
 function set(key, value) {
     pm.collectionVariables.set(key, value);
 }
 function get(key) {
     return pm.collectionVariables.get(key);
 }
+function getGlobalVar(varName) {
+    return varIsExist(varName) ? eval(varName) : undefined;
+}
+function tryEval(str) {
+    try {
+        return eval(str);
+    }
+    catch (error) {
+        console.error('tryEval =>', error);
+    }
+}
+function convertToInstance(cls, plain, options) {
+    const __postman = options?.postman ?? getGlobalVar('pm');
+    const __postwoman = options?.postwoman;
+    const instance = (0, class_transformer_1.plainToInstance)(cls, plain, options);
+    instance.init({ postman: __postman, postwoman: __postwoman });
+    return instance;
+}
 exports["default"] = {
     sayHello,
     parseJson,
+    tryEval,
     plainToInstance: class_transformer_1.plainToInstance,
     instanceToPlain: class_transformer_1.instanceToPlain,
     set,
     get,
+    varIsExist,
+    getGlobalVar,
+    convertToInstance,
 };
 
 
@@ -24650,12 +24726,6 @@ exports["default"] = {
 
 "use strict";
 
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -24663,24 +24733,19 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Variable = void 0;
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 const faker_1 = __importDefault(__webpack_require__(/*! ./faker */ "./src/utils/faker.ts"));
-const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
-class Variable {
+const base_1 = __webpack_require__(/*! ../lib/base */ "./src/lib/base.ts");
+class Variable extends base_1.Base {
     constructor(props) {
+        super(props);
         this.init(props);
     }
-    init(props) {
-        this.postman = props?.postman;
-    }
-    postman;
     get(key) {
-        console.log('get', key);
         if (this.postman?.collectionVariables?.get) {
             return this.postman?.collectionVariables?.get(key);
         }
         return undefined;
     }
     set(key, value, type) {
-        console.log('set', key, value, this.postman?.collectionVariables?.set);
         if (this.postman?.collectionVariables?.set) {
             if (typeof value === 'string') {
                 this.postman?.collectionVariables?.set(key, value);
@@ -24738,9 +24803,6 @@ class Variable {
         // console.log('generateVariables');
     }
 }
-__decorate([
-    (0, class_transformer_1.Exclude)()
-], Variable.prototype, "postman", void 0);
 exports.Variable = Variable;
 
 

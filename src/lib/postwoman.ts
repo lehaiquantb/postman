@@ -1,23 +1,40 @@
-import 'reflect-metadata';
-import '../plugins/moment/extendMoment';
-import moment from 'moment';
-import helper from '../utils/helper';
-import faker from '../utils/faker';
-import { Variable } from '../utils/variable';
-import tester from '../collections/tester';
-import request, { Request } from '../collections/request';
-import { forEach } from 'lodash';
 import {
+    Exclude,
+    Expose,
+    Transform,
+    TransformFnParams,
     instanceToPlain,
     plainToInstance,
-    Exclude,
-    Type,
-    instanceToInstance,
 } from 'class-transformer';
+import moment from 'moment';
+import { Request } from 'postman-collection';
+import 'reflect-metadata';
 import { Runner } from '../collections/runner';
+import tester from '../collections/tester';
+import '../plugins/moment/extendMoment';
 import constants from '../utils/constants';
+import faker from '../utils/faker';
+import helper from '../utils/helper';
+import { Variable } from '../utils/variable';
+import { Base, BaseProps } from './base';
 
 const VERSION = __VERSION__ || `${new Date().toISOString()}`;
+
+export type PWOnProcessOptions = {
+    pm?: Postman;
+};
+
+export type PWOnProcessCallbackOptions = {
+    pw?: Postwoman;
+};
+export type PWOnProcessCallback = (
+    opts: PWOnProcessCallbackOptions,
+) => Promise<void>;
+
+export type PWOnPreRequestOptions = {} & PWOnProcessOptions;
+
+export type PWOnTestOptions = {} & PWOnProcessOptions;
+export type PWOnCollectionTestOptions = {} & PWOnProcessOptions;
 
 export class X {
     v = 1;
@@ -32,55 +49,23 @@ const Test = {
     },
 };
 
-type PostwomanProps = {
-    pm?: Postman;
-};
+type PostwomanProps = {} & BaseProps;
 
-class Postwoman {
+export class Postwoman extends Base {
     constructor(props?: PostwomanProps) {
+        super(props);
         this.init(props);
     }
 
-    init(props?: PostwomanProps) {
-        this.postman = props?.pm;
-        if (this.variable) {
-            this.variable?.init({ postman: props?.pm });
-        } else {
-            this.variable = new Variable({ postman: props?.pm });
-        }
+    afterInit() {
+        [this.variable].forEach((item) => {
+            if (item) {
+                item.postwoman = this;
+            }
+        });
     }
 
-    @Exclude()
-    postman: Postman | undefined;
-
     version = VERSION;
-    // test(jsonString?: string) {
-    //     forEach(this, (value: any, key: string) => {
-    //         console.log(key, value);
-    //         console.log((this as any)[key]);
-    //     });
-    //     // return JSON.parse(jsonString);
-    // }
-
-    // serialize(): string {
-    //     const me = this as any;
-    //     const obj = JSON.parse(JSON.stringify(me));
-    //     forEach(obj, (key, value) => {
-    //         me[key];
-    //     });
-    //     return JSON.stringify(this);
-    // }
-
-    // deserialize(jsonString?: string): Postwoman {
-    //     const instance = new Postwoman();
-    //     const obj = helper.parseJson(jsonString);
-    //     forEach(this, (value: any, key: string) => {
-    //         const me: any = this;
-    //         if (me) {
-    //         }
-    //     });
-    //     return JSON.parse(jsonString);
-    // }
 
     @Exclude()
     Faker = faker;
@@ -94,20 +79,73 @@ class Postwoman {
     @Exclude()
     static Constants = constants;
 
-    @Type(() => Variable)
-    variable: Variable;
+    @Expose()
+    @Transform(
+        (params: TransformFnParams) => {
+            console.log('transform', params);
 
-    @Type(() => Runner)
-    runnerList: Runner[] = [];
+            return Postwoman.Helper.convertToInstance(
+                Variable,
+                params?.value,
+                (params?.options as any)?.extraData,
+            );
+        },
+        { toClassOnly: true },
+    )
+    variable?: Variable;
+
+    // @Type(() => Runner)
+    // runnerList: Runner[] = [];
 
     // @Exclude()
     Tester = tester;
 
-    @Exclude()
-    Request = request;
+    // @Type(() => PWRequest)
+    // @Exclude()
+    // @Transform((value: any) => {
+    //     // const postman = this.postman;
+    //     // eval(`(function() {
+    //     //     const sdk = require('postman-collection');
+    //     //     const newRequest = new sdk.Request(postman.request.toJSON());
+    //     //     return newRequest;
+    //     //     })()
+    //     // `);
+    //     // return new X();
+    //     console.log('transform', value);
+    // })
+    @Expose()
+    @Transform(
+        (params: TransformFnParams) => {
+            const postman = (params?.options as any)?.extraData
+                ?.postman as Postman;
+            console.log('transform var', params);
 
-    @Type(() => Request)
-    currentRequest = new Request();
+            return eval(`(function() {
+                const sdk = require('postman-collection');
+                if(!postman?.request){
+                    return undefined;        
+                }
+                const newRequest = new sdk.Request(postman?.request?.toJSON());
+                return newRequest;
+                })()
+            `);
+        },
+        { toClassOnly: true },
+    )
+    @Exclude({ toPlainOnly: true })
+    // @Transform(
+    //     (params: TransformFnParams) => {
+    //         const postman = (params?.options as any)?.extraData?.pm as Postman;
+    //         return eval(`(function() {
+    //             const sdk = require('postman-collection');
+    //             const newRequest = new sdk.Request(postman.request.toJSON());
+    //             return newRequest;
+    //             })()
+    //         `);
+    //     },
+    //     { toPlainOnly: true },
+    // )
+    currentRequest?: Request;
 
     // xs: X[] = [new X()];
 
@@ -120,47 +158,98 @@ class Postwoman {
     // }
 
     public snapShot(_pw?: Postwoman): void {
-        const me = _pw ?? this;
-        const postwomanObj = instanceToPlain(me);
+        try {
+            const me = _pw ?? this;
+            const postwomanObj = instanceToPlain(me);
 
-        me?.variable?.set(
-            Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
-            postwomanObj,
-        );
+            me?.variable?.set?.(
+                Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
+                postwomanObj,
+            );
+        } catch (error) {
+            console.error('snapShot', error);
+        }
+    }
+
+    public snapShotCurrentRequest(): void {
+        // this.postman.request.
+        // const me = this;
+        // const postwomanObj = instanceToPlain(me.currentRequest);
+        // me?.variable?.set(
+        //     Postwoman.Constants.CKey.CURRENT_REQUEST_PLAIN,
+        //     postwomanObj,
+        // );
     }
 
     static create(_pm?: Postman): Postwoman {
-        let postwoman: Postwoman;
-        const postwomanPlain = _pm?.collectionVariables?.get(
-            Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
-        );
-        const postwomanObj = Postwoman.Helper.parseJson(postwomanPlain) ?? {};
-        // @ts-ignore
-        if (__VERSION__ !== postwomanObj?.version) {
-            postwoman = new Postwoman({ pm: _pm });
-            // postwoman.variable.set(
-            //     Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
-            //     instanceToPlain(postwoman),
-            // );
-        } else {
-            postwoman = plainToInstance(Postwoman, postwomanObj);
-            postwoman.init({ pm: _pm });
-        }
+        try {
+            let postwoman: Postwoman;
+            const postwomanPlain = _pm?.collectionVariables?.get(
+                Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
+            );
+            const postwomanObj =
+                Postwoman.Helper.parseJson(postwomanPlain) ?? {};
 
-        return postwoman;
+            console.log('postwomanObj', postwomanObj);
+            postwoman = plainToInstance(Postwoman, postwomanObj, {
+                extraData: { postman: _pm, postwoman },
+            } as any);
+            postwoman.init({ postman: _pm });
+            postwoman.afterInit();
+
+            // @ts-ignore
+            // if (__VERSION__ !== postwomanObj?.version) {
+            //     // postwoman = new Postwoman({ pm: _pm });
+            //     postwoman = plainToInstance(Postwoman, postwomanObj);
+            //     postwoman.init({ pm: _pm });
+            //     // postwoman.variable.set(
+            //     //     Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
+            //     //     instanceToPlain(postwoman),
+            //     // );
+            // } else {
+            //     postwoman = plainToInstance(Postwoman, postwomanObj);
+            //     postwoman.init({ pm: _pm });
+            // }
+
+            return postwoman;
+        } catch (error) {
+            console.error('create', error);
+        }
     }
 
-    public static onPreRequest(
-        __pm: any,
-        callback: (postwoman: Postwoman) => void,
-    ): void {
-        const pw = Postwoman.create(__pm);
-        callback(pw);
-        pw.snapShot(pw);
+    public static async onProcess(
+        options: PWOnProcessOptions,
+        callback: PWOnProcessCallback,
+    ): Promise<void> {
+        try {
+            const pw = Postwoman.create(options?.pm);
+            await callback({ pw });
+            pw.snapShot(pw);
+        } catch (error) {
+            console.error('onProcess', error);
+        }
+    }
+
+    public static async onPreRequest(
+        opts: PWOnPreRequestOptions,
+        callback: (postwoman: Postwoman) => Promise<void>,
+    ): Promise<void> {
+        Postwoman.onProcess(opts, async (opts: PWOnProcessCallbackOptions) => {
+            return await callback(opts.pw);
+        });
+    }
+
+    public static async onCollectionTest(
+        _opts: PWOnCollectionTestOptions,
+        callback: (postwoman: Postwoman) => Promise<void>,
+    ): Promise<void> {
+        Postwoman.onProcess(_opts, async (opts: PWOnProcessCallbackOptions) => {
+            return await callback(opts.pw);
+        });
     }
 
     addRunner(runner = new Runner()) {
-        this.runnerList.push(runner);
+        // this.runnerList.push(runner);
     }
 }
 
@@ -207,13 +296,17 @@ class Postwoman {
 //         `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{}},"runnerList":[{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}}}`,
 //     ),
 // );
-
-const _postwoman = plainToInstance(
-    Postwoman,
-    Postwoman.Helper.parseJson(
-        `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{"a":1}},"runnerList":[{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}}}`,
-    ),
+const pObj = Postwoman.Helper.parseJson(
+    `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{"a":1}},"runnerList":
+    [{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}},"xxx":{}}`,
 );
+
+pObj.h = function () {
+    console.log('hello');
+};
+// const _postwoman = {};
+const _postwoman = plainToInstance(Postwoman, { variable: { a: {} }, pm: {} });
+// console.log(_postwoman);
 
 // const _postwoman = new Postwoman({ pm: {} });
 // console.log(instanceToPlain(_postwoman));

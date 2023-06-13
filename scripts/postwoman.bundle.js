@@ -4,7 +4,7 @@ var _Postwoman_ = {};
 
 var _serializer = {};
 
-var __VERSION__ = "2023-05-28T17:22:35.414Z";var pm = {};
+var __VERSION__ = "2023-06-13T18:56:52.431Z";var pm = {};
  /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -24134,16 +24134,121 @@ exports.Runner = Runner;
 
 /***/ }),
 
-/***/ "./src/collections/tester.ts":
-/*!***********************************!*\
-  !*** ./src/collections/tester.ts ***!
-  \***********************************/
+/***/ "./src/collections/tester.test.ts":
+/*!****************************************!*\
+  !*** ./src/collections/tester.test.ts ***!
+  \****************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
+// import { MatcherState } from 'expect';
+// import { Plugin } from 'pretty-format';
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tester = {};
+// let e1 = ((actual: any, ...rest: Array<any>) => {}) as jest.Expect;
+// e1.assertions = () => {
+//     pm.test("x",() => {
+//         pm.expect(true).to.be.true;
+//     })
+// };
+// e1.anything = () => {};
+// let e: jest.Expect = {
+//     anything: function () {
+//         throw new Error('Function not implemented.');
+//     },
+//     any: function (classType: any) {
+//         throw new Error('Function not implemented.');
+//     },
+//     arrayContaining: function <E = any>(arr: readonly E[]) {
+//         throw new Error('Function not implemented.');
+//     },
+//     assertions: function (num: number): void {
+//         throw new Error('Function not implemented.');
+//     },
+//     closeTo: function (num: number, numDigits?: number) {
+//         throw new Error('Function not implemented.');
+//     },
+//     hasAssertions: function (): void {
+//         throw new Error('Function not implemented.');
+//     },
+//     extend: function (obj: jest.ExpectExtendMap): void {
+//         throw new Error('Function not implemented.');
+//     },
+//     addSnapshotSerializer: function (serializer: Plugin): void {
+//         throw new Error('Function not implemented.');
+//     },
+//     objectContaining: function <E = {}>(obj: E) {
+//         throw new Error('Function not implemented.');
+//     },
+//     stringMatching: function (str: string | RegExp) {
+//         throw new Error('Function not implemented.');
+//     },
+//     stringContaining: function (str: string) {
+//         throw new Error('Function not implemented.');
+//     },
+//     not: undefined,
+//     setState: function (state: object): void {
+//         throw new Error('Function not implemented.');
+//     },
+//     getState: function (): MatcherState & Record<string, any> {
+//         throw new Error('Function not implemented.');
+//     },
+// };
+// class TesterExpect implements jest.Expect {
+//     constructor<T = any>() {}
+//     JestMatchers: jest;
+//     // <T = any>(actual: T): jest.JestMatchers<T>;
+//     anything() {
+//         throw new Error('Method not implemented.');
+//     }
+//     any(classType: any) {
+//         throw new Error('Method not implemented.');
+//     }
+//     arrayContaining<E = any>(arr: readonly E[]) {
+//         throw new Error('Method not implemented.');
+//     }
+//     assertions(num: number): void {
+//         throw new Error('Method not implemented.');
+//     }
+//     closeTo(num: number, numDigits?: number) {
+//         throw new Error('Method not implemented.');
+//     }
+//     hasAssertions(): void {
+//         throw new Error('Method not implemented.');
+//     }
+//     extend(obj: jest.ExpectExtendMap): void {
+//         throw new Error('Method not implemented.');
+//     }
+//     addSnapshotSerializer(serializer: Plugin): void {
+//         throw new Error('Method not implemented.');
+//     }
+//     objectContaining<E = {}>(obj: E) {
+//         throw new Error('Method not implemented.');
+//     }
+//     stringMatching(str: string | RegExp) {
+//         throw new Error('Method not implemented.');
+//     }
+//     stringContaining(str: string) {
+//         throw new Error('Method not implemented.');
+//     }
+//     not: jest.InverseAsymmetricMatchers;
+//     setState(state: object): void {
+//         throw new Error('Method not implemented.');
+//     }
+//     getState(): MatcherState & Record<string, any> {
+//         throw new Error('Method not implemented.');
+//     }
+// }
+class Tester {
+    constructor() { }
+}
+describe('Tester', () => {
+    it('should be defined', () => {
+        expect({}).toBeDefined();
+        expect.assertions(1);
+    });
+});
+const tester = new Tester();
 exports["default"] = tester;
 
 
@@ -24214,7 +24319,7 @@ const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 __webpack_require__(/*! reflect-metadata */ "./node_modules/reflect-metadata/Reflect.js");
 const runner_1 = __webpack_require__(/*! ../collections/runner */ "./src/collections/runner.ts");
-const tester_1 = __importDefault(__webpack_require__(/*! ../collections/tester */ "./src/collections/tester.ts"));
+const tester_test_1 = __importDefault(__webpack_require__(/*! ../collections/tester.test */ "./src/collections/tester.test.ts"));
 __webpack_require__(/*! ../plugins/moment/extendMoment */ "./src/plugins/moment/extendMoment.ts");
 const constants_1 = __importDefault(__webpack_require__(/*! ../utils/constants */ "./src/utils/constants.ts"));
 const faker_1 = __importDefault(__webpack_require__(/*! ../utils/faker */ "./src/utils/faker.ts"));
@@ -24255,7 +24360,7 @@ class Postwoman extends base_1.Base {
     // @Type(() => Runner)
     // runnerList: Runner[] = [];
     // @Exclude()
-    Tester = tester_1.default;
+    Tester = tester_test_1.default;
     // @Type(() => PWRequest)
     // @Exclude()
     // @Transform((value: any) => {

@@ -13,7 +13,10 @@
         "esModuleInterop": true,
         "types": [
             "chrome",
-            "node"
+            "node",
+            "jest",
+            "chai",
+            "events"
         ],
         "lib": [
             "ESNext",

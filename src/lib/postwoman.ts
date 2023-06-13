@@ -10,7 +10,7 @@ import moment from 'moment';
 import { Request } from 'postman-collection';
 import 'reflect-metadata';
 import { Runner } from '../collections/runner';
-import tester from '../collections/tester';
+import tester from '../collections/tester.test';
 import '../plugins/moment/extendMoment';
 import constants from '../utils/constants';
 import faker from '../utils/faker';

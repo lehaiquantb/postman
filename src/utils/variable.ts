@@ -8,8 +8,6 @@ type VariableProps = {
 
 export class Variable extends Base {
     constructor(props?: VariableProps) {
-        console.log('Variable constructor');
-
         super(props);
         this.init(props);
     }
@@ -22,6 +20,8 @@ export class Variable extends Base {
     }
 
     public set(key: string, value: any, type?: any): void {
+        this.log('set', this.postman);
+        
         if (this.postman?.collectionVariables?.set) {
             if (typeof value === 'string') {
                 this.postman?.collectionVariables?.set(key, value);

@@ -91,7 +91,8 @@ function convertToInstanceFromTransformFnParams<T extends Base, V>(
             postwoman: __postwoman,
         },
     });
-    instance?.init({ postman: __postman, postwoman: __postwoman });
+
+    // Postwoman.log('convertToInstanceFromTransformFnParams', params, instance);
 
     return instance;
 }

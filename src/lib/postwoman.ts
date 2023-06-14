@@ -17,6 +17,8 @@ import faker from '../utils/faker';
 import helper from '../utils/helper';
 import { Variable } from '../utils/variable';
 import { Base, BaseProps } from './base';
+import { PWRequest } from '../collections/request';
+import { TransformToClassRequest } from '../decorators/transform.request.decorator';
 
 const VERSION = __VERSION__ || `${new Date().toISOString()}`;
 
@@ -53,7 +55,7 @@ type PostwomanProps = {} & BaseProps;
 
 export class Postwoman extends Base {
     constructor(props?: PostwomanProps) {
-        console.log('Postwoman constructor');
+        // console.log('Postwoman constructor');
         super(props);
         this.init(props);
         Postwoman.instance = this;
@@ -85,7 +87,7 @@ export class Postwoman extends Base {
     @Transform(
         (params: TransformFnParams) => {
             return Postwoman.Helper.convertToInstanceFromTransformFnParams(
-                Tester,
+                Variable,
                 params,
             );
         },
@@ -122,41 +124,15 @@ export class Postwoman extends Base {
     //     console.log('transform', value);
     // })
     @Expose()
+    @TransformToClassRequest()
+    // @Exclude({ toPlainOnly: true })
     @Transform(
         (params: TransformFnParams) => {
-            const postman = params?.options?.extraData?.postman;
-            console.log('transform var', params);
-
-            return Postwoman.Helper.tryEval(
-                `(function() {
-                if(!postman?.request || !require){
-                        return undefined;        
-                }
-                const sdk = require('postman-collection');
-
-                const newRequest = new sdk.Request(postman?.request?.toJSON());
-                return newRequest;
-                })()
-            `,
-                { postman },
-            );
+            return params?.value?.toJSON?.();
         },
-        { toClassOnly: true },
+        { toPlainOnly: true },
     )
-    @Exclude({ toPlainOnly: true })
-    // @Transform(
-    //     (params: TransformFnParams) => {
-    //         const postman = (params?.options as any)?.extraData?.pm as Postman;
-    //         return eval(`(function() {
-    //             const sdk = require('postman-collection');
-    //             const newRequest = new sdk.Request(postman.request.toJSON());
-    //             return newRequest;
-    //             })()
-    //         `);
-    //     },
-    //     { toPlainOnly: true },
-    // )
-    currentRequest?: Request;
+    currentRequest?: PWRequest;
 
     // xs: X[] = [new X()];
 
@@ -168,17 +144,26 @@ export class Postwoman extends Base {
     //     console.log(this.xs);
     // }
 
-    public snapShot(_pw?: Postwoman): void {
+    public snapShot(_pw?: Postwoman, _pm?: Postman): void {
         try {
             const me = _pw ?? this;
-            const postwomanObj = instanceToPlain(me);
+            let postwomanObj = instanceToPlain(me);
+            if (typeof postwomanObj === 'object') {
+                if (postwomanObj?.SNAPSHOT_AT?.length) {
+                    delete postwomanObj.SNAPSHOT_AT;
+                }
+                postwomanObj = {
+                    SNAPSHOT_AT: moment().toISOString(),
+                    ...postwomanObj,
+                };
+            }
 
             me?.variable?.set?.(
                 Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
                 postwomanObj,
             );
         } catch (error) {
-            console.error('snapShot', error);
+            Postwoman.error('snapShot', error);
         }
     }
 
@@ -223,7 +208,7 @@ export class Postwoman extends Base {
 
             return postwoman;
         } catch (error) {
-            console.error('create', error);
+            Postwoman.error('create', error);
         }
     }
 
@@ -234,9 +219,9 @@ export class Postwoman extends Base {
         try {
             const pw = Postwoman.create(options?.pm);
             await callback({ pw });
-            pw.snapShot(pw);
+            pw.snapShot(pw, options?.pm);
         } catch (error) {
-            console.error('onProcess', error);
+            Postwoman.error('onProcess', error);
         }
     }
 
@@ -315,13 +300,24 @@ pObj.h = function () {
     console.log('hello');
 };
 // const _postwoman = {};
-const _postwoman = plainToInstance(Postwoman, { variable: { a: {} }, pm: {} });
+const _postwoman = plainToInstance(Postwoman, {
+    variable: { a: {} },
+    pm: {},
+    currentRequest: {},
+});
+_postwoman.currentRequest = {} as any;
+const _plainPostwoman = instanceToPlain(_postwoman);
+
 // console.log(_postwoman);
 
 // const _postwoman = new Postwoman({ pm: {} });
 // console.log(instanceToPlain(_postwoman));
 
-console.log('HELLO POSTMAN with version => ', VERSION);
+Postwoman.log('HELLO POSTMAN with version => ', VERSION);
+if (__ENV__ === 'development') {
+    // @ts-ignore
+    _plainPostwoman_ = _plainPostwoman;
+}
 
 // @ts-ignore
 _postwoman_ = _postwoman;

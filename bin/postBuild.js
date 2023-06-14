@@ -15,8 +15,9 @@ function makePostwomanIsGlobal() {
         filePath = path.resolve(__dirname, '../scripts/postwoman.min.js');
     }
     if (mode == 'development') {
-        newText += `var pm = {};\n`;
+        newText += `var pm = {};\nvar _plainPostwoman_ = {};\n`;
     }
+    newText += `var __ENV__ = "${mode}";\n`;
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             console.error(err);

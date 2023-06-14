@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, TransformFnParams, Type } from 'class-transformer';
 import { X } from '../lib/postwoman';
 import { Serializable } from '../@types/index';
 import {
@@ -14,7 +14,7 @@ import {
     QueryParam,
 } from 'postman-collection';
 
-// const R = require('postman-collection').Request 
+// const R = require('postman-collection').Request
 // @ts-ignore
 
 const request = {
@@ -23,8 +23,11 @@ const request = {
         // pm.request.url
     },
 };
-
-export class PWRequest  {
+    
+export class PWRequest extends Request {
+    // constructor() {
+    //     super({});
+    // }
     // url: Url;
     // headers: HeaderList;
     // method: string;
@@ -104,10 +107,8 @@ export class PWRequest  {
     //     throw new Error('Method not implemented.');
     // }
     // ax = pm?.collectionVariables?.get('a');
-
     // @Type(() => X)
     // rrr = new X();
-
     // body: PRequest.definition['body'];
 }
 

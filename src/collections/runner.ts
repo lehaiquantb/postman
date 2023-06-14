@@ -6,5 +6,6 @@ export class Runner {
     setId(_id: string) {
         this.id = `runner-${_id}}`;
     }
+    
     run() {}
 }

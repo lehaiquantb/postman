@@ -1,5 +1,5 @@
-import { Exclude } from "class-transformer";
-import { Postwoman } from "./postwoman";
+import { Exclude } from 'class-transformer';
+import { Postwoman } from './postwoman';
 
 export type BaseProps = {
     postman?: Postman | undefined;
@@ -21,5 +21,21 @@ export class Base {
     public init(props?: BaseProps) {
         this.postman = props?.postman;
         this.postwoman = props?.postwoman;
+    }
+
+    log(message?: any, ...args: any[]) {
+        Postwoman.log(message, ...args);
+    }
+
+    error(message?: any, ...args: any[]) {
+        Postwoman.error(message, ...args);
+    }
+
+    static log(message?: any, ...args: any[]) {
+        console.log(`[POSTWOMAN]: ${message}`, ...args);
+    }
+
+    static error(message?: any, ...args: any[]) {
+        console.error(`[POSTWOMAN]: ${message}`, ...args);
     }
 }

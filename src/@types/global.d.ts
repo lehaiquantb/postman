@@ -1,4 +1,5 @@
 declare var __VERSION__: string;
+declare var __ENV__: "development" | "production";
 
 type PMRequest = import('postman-collection').Request;
 type TransformationType =

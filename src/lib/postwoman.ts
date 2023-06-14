@@ -10,7 +10,7 @@ import moment from 'moment';
 import { Request } from 'postman-collection';
 import 'reflect-metadata';
 import { Runner } from '../collections/runner';
-import tester from '../collections/tester.test';
+import tester, { Tester } from '../collections/tester.test';
 import '../plugins/moment/extendMoment';
 import constants from '../utils/constants';
 import faker from '../utils/faker';
@@ -53,16 +53,18 @@ type PostwomanProps = {} & BaseProps;
 
 export class Postwoman extends Base {
     constructor(props?: PostwomanProps) {
+        console.log('Postwoman constructor');
         super(props);
         this.init(props);
+        Postwoman.instance = this;
     }
+    private static instance: Postwoman;
 
-    afterInit() {
-        [this.variable].forEach((item) => {
-            if (item) {
-                item.postwoman = this;
-            }
-        });
+    public static getInstance(): Postwoman {
+        if (!Postwoman.instance) {
+            Postwoman.instance = new Postwoman();
+        }
+        return Postwoman.instance;
     }
 
     version = VERSION;
@@ -82,12 +84,9 @@ export class Postwoman extends Base {
     @Expose()
     @Transform(
         (params: TransformFnParams) => {
-            console.log('transform', params);
-
-            return Postwoman.Helper.convertToInstance(
-                Variable,
-                params?.value,
-                (params?.options as any)?.extraData,
+            return Postwoman.Helper.convertToInstanceFromTransformFnParams(
+                Tester,
+                params,
             );
         },
         { toClassOnly: true },
@@ -97,8 +96,17 @@ export class Postwoman extends Base {
     // @Type(() => Runner)
     // runnerList: Runner[] = [];
 
-    // @Exclude()
-    Tester = tester;
+    @Expose()
+    @Transform(
+        (params: TransformFnParams) => {
+            return Postwoman.Helper.convertToInstanceFromTransformFnParams(
+                Tester,
+                params,
+            );
+        },
+        { toClassOnly: true },
+    )
+    tester!: Tester;
 
     // @Type(() => PWRequest)
     // @Exclude()
@@ -116,19 +124,22 @@ export class Postwoman extends Base {
     @Expose()
     @Transform(
         (params: TransformFnParams) => {
-            const postman = (params?.options as any)?.extraData
-                ?.postman as Postman;
+            const postman = params?.options?.extraData?.postman;
             console.log('transform var', params);
 
-            return eval(`(function() {
-                const sdk = require('postman-collection');
-                if(!postman?.request){
-                    return undefined;        
+            return Postwoman.Helper.tryEval(
+                `(function() {
+                if(!postman?.request || !require){
+                        return undefined;        
                 }
+                const sdk = require('postman-collection');
+
                 const newRequest = new sdk.Request(postman?.request?.toJSON());
                 return newRequest;
                 })()
-            `);
+            `,
+                { postman },
+            );
         },
         { toClassOnly: true },
     )
@@ -190,12 +201,11 @@ export class Postwoman extends Base {
             const postwomanObj =
                 Postwoman.Helper.parseJson(postwomanPlain) ?? {};
 
-            console.log('postwomanObj', postwomanObj);
+            // console.log('postwomanObj', postwomanObj);
             postwoman = plainToInstance(Postwoman, postwomanObj, {
                 extraData: { postman: _pm, postwoman },
-            } as any);
+            });
             postwoman.init({ postman: _pm });
-            postwoman.afterInit();
 
             // @ts-ignore
             // if (__VERSION__ !== postwomanObj?.version) {

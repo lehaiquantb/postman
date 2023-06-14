@@ -4,7 +4,7 @@ var _Postwoman_ = {};
 
 var _serializer = {};
 
-var __VERSION__ = "2023-06-13T18:56:52.431Z";var pm = {};
+var __VERSION__ = "2023-06-14T10:55:53.387Z";var pm = {};
  /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -24138,13 +24138,15 @@ exports.Runner = Runner;
 /*!****************************************!*\
   !*** ./src/collections/tester.test.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 // import { MatcherState } from 'expect';
 // import { Plugin } from 'pretty-format';
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Tester = void 0;
+const base_1 = __webpack_require__(/*! ../lib/base */ "./src/lib/base.ts");
 // let e1 = ((actual: any, ...rest: Array<any>) => {}) as jest.Expect;
 // e1.assertions = () => {
 //     pm.test("x",() => {
@@ -24239,15 +24241,20 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 //         throw new Error('Method not implemented.');
 //     }
 // }
-class Tester {
-    constructor() { }
+class Tester extends base_1.Base {
+    constructor() {
+        super();
+    }
+    describe() {
+        describe('Tester', () => {
+            it('should be defined', () => {
+                expect({}).toBeDefined();
+                expect.assertions(1);
+            });
+        });
+    }
 }
-describe('Tester', () => {
-    it('should be defined', () => {
-        expect({}).toBeDefined();
-        expect.assertions(1);
-    });
-});
+exports.Tester = Tester;
 const tester = new Tester();
 exports["default"] = tester;
 
@@ -24319,12 +24326,11 @@ const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node
 const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 __webpack_require__(/*! reflect-metadata */ "./node_modules/reflect-metadata/Reflect.js");
 const runner_1 = __webpack_require__(/*! ../collections/runner */ "./src/collections/runner.ts");
-const tester_test_1 = __importDefault(__webpack_require__(/*! ../collections/tester.test */ "./src/collections/tester.test.ts"));
+const tester_test_1 = __webpack_require__(/*! ../collections/tester.test */ "./src/collections/tester.test.ts");
 __webpack_require__(/*! ../plugins/moment/extendMoment */ "./src/plugins/moment/extendMoment.ts");
 const constants_1 = __importDefault(__webpack_require__(/*! ../utils/constants */ "./src/utils/constants.ts"));
 const faker_1 = __importDefault(__webpack_require__(/*! ../utils/faker */ "./src/utils/faker.ts"));
 const helper_1 = __importDefault(__webpack_require__(/*! ../utils/helper */ "./src/utils/helper.ts"));
-const variable_1 = __webpack_require__(/*! ../utils/variable */ "./src/utils/variable.ts");
 const base_1 = __webpack_require__(/*! ./base */ "./src/lib/base.ts");
 const VERSION = __VERSION__ || `${new Date().toISOString()}`;
 class X {
@@ -24341,15 +24347,17 @@ const Test = {
 };
 class Postwoman extends base_1.Base {
     constructor(props) {
+        console.log('Postwoman constructor');
         super(props);
         this.init(props);
+        Postwoman.instance = this;
     }
-    afterInit() {
-        [this.variable].forEach((item) => {
-            if (item) {
-                item.postwoman = this;
-            }
-        });
+    static instance;
+    static getInstance() {
+        if (!Postwoman.instance) {
+            Postwoman.instance = new Postwoman();
+        }
+        return Postwoman.instance;
     }
     version = VERSION;
     Faker = faker_1.default;
@@ -24359,8 +24367,7 @@ class Postwoman extends base_1.Base {
     variable;
     // @Type(() => Runner)
     // runnerList: Runner[] = [];
-    // @Exclude()
-    Tester = tester_test_1.default;
+    tester;
     // @Type(() => PWRequest)
     // @Exclude()
     // @Transform((value: any) => {
@@ -24418,12 +24425,11 @@ class Postwoman extends base_1.Base {
             let postwoman;
             const postwomanPlain = _pm?.collectionVariables?.get(Postwoman.Constants.CKey.POSTWOMAN_PLAIN);
             const postwomanObj = Postwoman.Helper.parseJson(postwomanPlain) ?? {};
-            console.log('postwomanObj', postwomanObj);
+            // console.log('postwomanObj', postwomanObj);
             postwoman = (0, class_transformer_1.plainToInstance)(Postwoman, postwomanObj, {
                 extraData: { postman: _pm, postwoman },
             });
             postwoman.init({ postman: _pm });
-            postwoman.afterInit();
             // @ts-ignore
             // if (__VERSION__ !== postwomanObj?.version) {
             //     // postwoman = new Postwoman({ pm: _pm });
@@ -24476,25 +24482,30 @@ __decorate([
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_transformer_1.Transform)((params) => {
-        console.log('transform', params);
-        return Postwoman.Helper.convertToInstance(variable_1.Variable, params?.value, params?.options?.extraData);
+        return Postwoman.Helper.convertToInstanceFromTransformFnParams(tester_test_1.Tester, params);
     }, { toClassOnly: true })
 ], Postwoman.prototype, "variable", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_transformer_1.Transform)((params) => {
-        const postman = params?.options?.extraData
-            ?.postman;
+        return Postwoman.Helper.convertToInstanceFromTransformFnParams(tester_test_1.Tester, params);
+    }, { toClassOnly: true })
+], Postwoman.prototype, "tester", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    (0, class_transformer_1.Transform)((params) => {
+        const postman = params?.options?.extraData?.postman;
         console.log('transform var', params);
-        return eval(`(function() {
-                const sdk = require('postman-collection');
-                if(!postman?.request){
-                    return undefined;        
+        return Postwoman.Helper.tryEval(`(function() {
+                if(!postman?.request || !require){
+                        return undefined;        
                 }
+                const sdk = require('postman-collection');
+
                 const newRequest = new sdk.Request(postman?.request?.toJSON());
                 return newRequest;
                 })()
-            `);
+            `, { postman });
     }, { toClassOnly: true }),
     (0, class_transformer_1.Exclude)({ toPlainOnly: true })
     // @Transform(
@@ -24763,6 +24774,7 @@ exports["default"] = {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const class_transformer_1 = __webpack_require__(/*! class-transformer */ "./node_modules/class-transformer/esm5/index.js");
+const postwoman_1 = __webpack_require__(/*! ../lib/postwoman */ "./src/lib/postwoman.ts");
 function sayHello() {
     console.log('hello');
 }
@@ -24792,19 +24804,43 @@ function get(key) {
 function getGlobalVar(varName) {
     return varIsExist(varName) ? eval(varName) : undefined;
 }
-function tryEval(str) {
+function tryEval(str, context) {
     try {
-        return eval(str);
+        const contextString = `
+            const { ${Object.keys(context ?? {}).join(',')} } = context ?? {};
+        `;
+        return eval(contextString + str);
     }
     catch (error) {
         console.error('tryEval =>', error);
+        return undefined;
     }
 }
 function convertToInstance(cls, plain, options) {
-    const __postman = options?.postman ?? getGlobalVar('pm');
-    const __postwoman = options?.postwoman;
+    const __postman = options?.extraData?.postman ?? getGlobalVar('pm');
+    const __postwoman = options?.extraData?.postwoman;
+    // console.log('__postman', __postman);
+    // console.log('__postwoman', __postwoman);
+    // console.log('cls', cls);
+    // console.log('plain', plain);
+    // console.log('options', options);
     const instance = (0, class_transformer_1.plainToInstance)(cls, plain, options);
-    instance.init({ postman: __postman, postwoman: __postwoman });
+    instance?.init({ postman: __postman, postwoman: __postwoman });
+    return instance;
+}
+function convertToInstanceFromTransformFnParams(cls, params, postwoman) {
+    const __postman = params?.options?.extraData?.postman ?? getGlobalVar('pm');
+    const __postwoman = postwoman ??
+        params?.options?.extraData?.postwoman ??
+        postwoman_1.Postwoman.getInstance();
+    const instance = convertToInstance(cls, params?.value ?? {}, {
+        ...params?.options,
+        extraData: {
+            postman: __postman,
+            postwoman: __postwoman,
+        },
+    });
+    instance?.init({ postman: __postman, postwoman: __postwoman });
     return instance;
 }
 exports["default"] = {
@@ -24818,97 +24854,8 @@ exports["default"] = {
     varIsExist,
     getGlobalVar,
     convertToInstance,
+    convertToInstanceFromTransformFnParams,
 };
-
-
-/***/ }),
-
-/***/ "./src/utils/variable.ts":
-/*!*******************************!*\
-  !*** ./src/utils/variable.ts ***!
-  \*******************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Variable = void 0;
-const moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
-const faker_1 = __importDefault(__webpack_require__(/*! ./faker */ "./src/utils/faker.ts"));
-const base_1 = __webpack_require__(/*! ../lib/base */ "./src/lib/base.ts");
-class Variable extends base_1.Base {
-    constructor(props) {
-        super(props);
-        this.init(props);
-    }
-    get(key) {
-        if (this.postman?.collectionVariables?.get) {
-            return this.postman?.collectionVariables?.get(key);
-        }
-        return undefined;
-    }
-    set(key, value, type) {
-        if (this.postman?.collectionVariables?.set) {
-            if (typeof value === 'string') {
-                this.postman?.collectionVariables?.set(key, value);
-            }
-            else {
-                this.postman?.collectionVariables?.set(key, JSON.stringify(value));
-            }
-        }
-    }
-    static context = {
-        moment: moment_1.default,
-        faker: faker_1.default,
-    };
-    values = {};
-    evaluate(evaluateString, variableKey) {
-        try {
-            let v = this.values?.[variableKey];
-            const { moment, faker } = Variable.context;
-            if (!v) {
-                v = eval(evaluateString);
-            }
-            return v;
-        }
-        catch (error) {
-            return undefined;
-        }
-    }
-    // evaluateVariable('moment()');
-    generateCustom() {
-        const variableKeys = [];
-        // const string = "{{!aas().asd'}}1212{{!bas}}";
-        const regexp = /{{(![^\}\{]+)}}/g;
-        let matchText = '';
-        const request = pm.request;
-        const { url: { query }, headers, body, } = pm.request;
-        query?.each((q) => {
-            matchText += `${q?.key}\n${q?.value}\n`;
-        }, null);
-        headers?.each((h) => {
-            matchText += `${h?.key}\n${h?.value}\n`;
-        }, null);
-        if ((body.mode = 'raw')) {
-            matchText += `${body?.raw}\n`;
-        }
-        const matches = matchText.matchAll(regexp);
-        for (const match of matches) {
-            variableKeys.push(match?.[1]);
-        }
-        variableKeys.forEach((key) => {
-            const evaluateString = key.replace('!', '');
-            const value = this.evaluate(evaluateString, key);
-            pm.collectionVariables.set(key, value);
-        });
-        // console.log('variableKeys', variableKeys);
-        // console.log('generateVariables');
-    }
-}
-exports.Variable = Variable;
 
 
 /***/ })

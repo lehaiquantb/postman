@@ -1,6 +1,7 @@
 import {
     ClassConstructor,
     ClassTransformOptions,
+    TransformFnParams,
     instanceToPlain,
     plainToInstance,
 } from 'class-transformer';
@@ -39,27 +40,58 @@ function getGlobalVar<T = any>(varName: string): T | undefined {
     return varIsExist(varName) ? eval(varName) : undefined;
 }
 
-function tryEval(str: string): any {
+function tryEval(str: string, context?: Record<string, any>): any {
     try {
-        return eval(str);
+        const contextString = `
+            const { ${Object.keys(context ?? {}).join(',')} } = context ?? {};
+        `;
+        return eval(contextString + str);
     } catch (error) {
         console.error('tryEval =>', error);
+        return undefined;
     }
 }
 
 function convertToInstance<T extends Base, V>(
     cls: ClassConstructor<T>,
-    plain: V,
-    options?: ClassTransformOptions & {
-        postman?: Postman;
-        postwoman?: Postwoman;
-    },
-): T {
-    const __postman = options?.postman ?? getGlobalVar<Postman>('pm');
-    const __postwoman = options?.postwoman;
+    plain?: V,
+    options?: ClassTransformOptions,
+): T | undefined {
+    const __postman =
+        options?.extraData?.postman ?? getGlobalVar<Postman>('pm');
+    const __postwoman = options?.extraData?.postwoman;
+    // console.log('__postman', __postman);
+    // console.log('__postwoman', __postwoman);
+    // console.log('cls', cls);
+    // console.log('plain', plain);
+    // console.log('options', options);
 
     const instance = plainToInstance(cls, plain, options);
-    instance.init({ postman: __postman, postwoman: __postwoman });
+    instance?.init({ postman: __postman, postwoman: __postwoman });
+
+    return instance;
+}
+
+function convertToInstanceFromTransformFnParams<T extends Base, V>(
+    cls: ClassConstructor<T>,
+    params?: TransformFnParams,
+    postwoman?: Postwoman,
+): T {
+    const __postman =
+        params?.options?.extraData?.postman ?? getGlobalVar<Postman>('pm');
+    const __postwoman =
+        postwoman ??
+        params?.options?.extraData?.postwoman ??
+        Postwoman.getInstance();
+
+    const instance = convertToInstance(cls, params?.value ?? {}, {
+        ...params?.options,
+        extraData: {
+            postman: __postman,
+            postwoman: __postwoman,
+        },
+    });
+    instance?.init({ postman: __postman, postwoman: __postwoman });
 
     return instance;
 }
@@ -75,4 +107,5 @@ export default {
     varIsExist,
     getGlobalVar,
     convertToInstance,
+    convertToInstanceFromTransformFnParams,
 };

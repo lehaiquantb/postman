@@ -1,6 +1,8 @@
 // import { MatcherState } from 'expect';
 // import { Plugin } from 'pretty-format';
 
+import { Base } from '../lib/base';
+
 // let e1 = ((actual: any, ...rest: Array<any>) => {}) as jest.Expect;
 // e1.assertions = () => {
 //     pm.test("x",() => {
@@ -98,18 +100,22 @@
 //     }
 // }
 
-class Tester {
-    constructor() {}
+export class Tester extends Base {
+    constructor() {
+        super();
+    }
+
+    describe() {
+        describe('Tester', () => {
+            it('should be defined', () => {
+                expect({}).toBeDefined();
+                expect.assertions(1);
+            });
+        });
+    }
 
     // expect: TesterExpect = expect;
 }
-
-describe('Tester', () => {
-    it('should be defined', () => {
-        expect({}).toBeDefined();
-        expect.assertions(1);
-    });
-});
 
 const tester = new Tester();
 export default tester;

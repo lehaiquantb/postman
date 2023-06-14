@@ -8,6 +8,8 @@ type VariableProps = {
 
 export class Variable extends Base {
     constructor(props?: VariableProps) {
+        console.log('Variable constructor');
+
         super(props);
         this.init(props);
     }

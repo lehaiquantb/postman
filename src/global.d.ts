@@ -1,3 +1,7 @@
-declare var __VERSION__: string;
+import * as cl from 'class-transformer';
 
-type PMRequest = import('postman-collection').Request;
+declare module 'class-transformer/types/interfaces/class-transformer-options.interface' {
+    export interface ClassTransformOptions {
+        extraData: ClassTransformOptionsExtraData;
+    }
+}

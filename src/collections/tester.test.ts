@@ -1,7 +1,9 @@
 // import { MatcherState } from 'expect';
 // import { Plugin } from 'pretty-format';
 
+import { Exclude } from 'class-transformer';
 import { Base } from '../lib/base';
+import { Postwoman } from '../lib/postwoman';
 
 // let e1 = ((actual: any, ...rest: Array<any>) => {}) as jest.Expect;
 // e1.assertions = () => {
@@ -99,19 +101,30 @@ import { Base } from '../lib/base';
 //         throw new Error('Method not implemented.');
 //     }
 // }
+// @Exclude()
+export class B {
+    constructor() {}
+
+    @Exclude()
+    pm: Postwoman// = new Postwoman();
+}
 
 export class Tester extends Base {
     constructor() {
         super();
     }
 
-    describe() {
-        describe('Tester', () => {
-            it('should be defined', () => {
-                expect({}).toBeDefined();
-                expect.assertions(1);
-            });
-        });
+    // describe() {
+    //     describe('Tester', () => {
+    //         it('should be defined', () => {
+    //             expect({}).toBeDefined();
+    //             expect.assertions(1);
+    //         });
+    //     });
+    // }
+
+    addCase(name: string, cb: any) {
+        cb?.();
     }
 
     // expect: TesterExpect = expect;

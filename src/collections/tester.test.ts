@@ -1,8 +1,7 @@
 // import { MatcherState } from 'expect';
 // import { Plugin } from 'pretty-format';
 
-import { Exclude } from 'class-transformer';
-import { Base } from '../lib/base';
+import { Base, BaseProps, IBase } from '../lib/base';
 import { Postwoman } from '../lib/postwoman';
 
 // let e1 = ((actual: any, ...rest: Array<any>) => {}) as jest.Expect;
@@ -102,17 +101,34 @@ import { Postwoman } from '../lib/postwoman';
 //     }
 // }
 // @Exclude()
-export class B {
-    constructor() {}
 
-    @Exclude()
-    pm: Postwoman// = new Postwoman();
-}
-
-export class Tester extends Base {
-    constructor() {
-        super();
+/**
+ * This file will be run in test environment, make sure to import only test dependencies
+ */
+export class PWTester implements IBase {
+    constructor(props?: BaseProps) {
+        this.postman = props?.postman;
+        this.postwoman = props?.postwoman;
     }
+
+    init(props?: BaseProps): void {
+        this.postman = props?.postman;
+        this.postwoman = props?.postwoman;
+    }
+
+    postman?: Postman | undefined;
+
+    postwoman?: Postwoman | undefined;
+
+    testCaseList: TestCase[] = [];
+
+    log = (message?: any, ...args: any[]) => {
+        console.log(`[PWTester]: ${message}`, ...args);
+    };
+
+    error = (message?: any, ...args: any[]) => {
+        console.log(`[PWTester]: ${message}`, ...args);
+    };
 
     // describe() {
     //     describe('Tester', () => {
@@ -124,11 +140,19 @@ export class Tester extends Base {
     // }
 
     addCase(name: string, cb: any) {
-        cb?.();
+        this.testCaseList.push({
+            name,
+            func: cb,
+        });
+        console.log(cb?.());
     }
+
+    start() {}
+
+    // run() {}
 
     // expect: TesterExpect = expect;
 }
 
-const tester = new Tester();
+const tester = new PWTester();
 export default tester;

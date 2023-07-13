@@ -12,3 +12,8 @@ type ClassTransformOptionsExtraData = {
     postman?: Postman;
     postwoman?: Postwoman;
 };
+
+type TestCase = {
+    name: string;
+    func: () => void;
+}

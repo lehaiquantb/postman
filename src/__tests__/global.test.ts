@@ -1,7 +1,8 @@
-import tester from "../collections/tester.test";
+import tester from '../collections/tester.test';
+import request from 'supertest';
 
 const addCase = (name: string, cb: any) => {
-    cb?.()
+    cb?.();
 };
 describe('Tester', () => {
     it('should be defined', () => {
@@ -13,11 +14,12 @@ describe('Tester', () => {
         });
     });
 
-    tester.addCase('a', () => {
+    tester.addCase('a', async () => {
         describe('testCase_', () => {
             it('testCase_ should be ', () => {
                 expect({}).toBeDefined();
             });
         });
+        return 'a';
     });
 });

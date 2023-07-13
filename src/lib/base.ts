@@ -6,8 +6,16 @@ export type BaseProps = {
     postwoman?: Postwoman | undefined;
 };
 
+export type IBase = {
+    postman?: Postman | undefined;
+    postwoman?: Postwoman | undefined;
+    log: (message?: any, ...args: any[]) => void;
+    error: (message?: any, ...args: any[]) => void;
+    init(props?: BaseProps): void;
+};
+
 @Exclude()
-export class Base {
+export class Base implements IBase {
     constructor(props?: BaseProps) {
         this.init(props);
     }

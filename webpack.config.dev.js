@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const { exec } = require('child_process');
 const postwomanPath = path.join(__dirname, './src/lib/postwoman.ts');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
     devtool: 'cheap-module-source-map',
@@ -68,12 +69,25 @@ module.exports = {
         // alias: {
         //     utils1: path.resolve(__dirname, './src/utils'), // <-- When you build or restart dev-server, you'll get an error if the path to your utils.js file is incorrect.
         // },
+        fallback: {
+            fs: false,
+            tls: false,
+            net: false,
+            path: false,
+            zlib: false,
+            http: false,
+            https: false,
+            stream: false,
+            crypto: false,
+            'crypto-browserify': require.resolve('crypto-browserify'), //if you want to use this module also don't forget npm i crypto-browserify
+        },
     },
     // Chứa các plugins sẽ cài đặt trong tương lai
     plugins: [
         // new HtmlWebpackPlugin({
         //     template: './js/index.html',
         // }),
+        new NodePolyfillPlugin(),
         new webpack.ProvidePlugin({
             _: 'lodash',
         }),

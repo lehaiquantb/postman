@@ -10,7 +10,7 @@ import moment from 'moment';
 import { Request } from 'postman-collection';
 import 'reflect-metadata';
 import { Runner } from '../collections/runner';
-import tester, { PWTester } from '../collections/tester.test';
+import tester, { PWTestModule } from '../collections/tester.test';
 import '../plugins/moment/extendMoment';
 import constants from '../utils/constants';
 import faker from '../utils/faker';
@@ -102,13 +102,13 @@ export class Postwoman extends Base {
     @Transform(
         (params: TransformFnParams) => {
             return Postwoman.Helper.convertToInstanceFromTransformFnParams(
-                PWTester,
+                PWTestModule,
                 params,
             );
         },
         { toClassOnly: true },
     )
-    tester!: PWTester;
+    tester!: PWTestModule;
 
     // @Type(() => PWRequest)
     // @Exclude()

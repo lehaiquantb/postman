@@ -1,5 +1,5 @@
 declare var __VERSION__: string;
-declare var __ENV__: "development" | "production";
+declare var __ENV__: 'development' | 'production';
 
 type PMRequest = import('postman-collection').Request;
 type TransformationType =
@@ -13,7 +13,7 @@ type ClassTransformOptionsExtraData = {
     postwoman?: Postwoman;
 };
 
-type TestCase = {
-    name: string;
-    func: () => void;
-}
+// type TestCase = {
+//     name: string;
+//     func: () => Promise<any>;
+// };

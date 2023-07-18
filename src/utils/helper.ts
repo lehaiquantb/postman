@@ -7,6 +7,8 @@ import {
 } from 'class-transformer';
 import { Postwoman } from '../lib/postwoman';
 import { Base } from '../lib/base';
+import Uuid from 'uuid';
+
 function sayHello() {
     console.log('hello');
 }
@@ -95,6 +97,10 @@ function convertToInstanceFromTransformFnParams<T extends Base, V>(
     // Postwoman.log('convertToInstanceFromTransformFnParams', params, instance);
 
     return instance;
+}
+
+export function generateUuid() {
+    return Uuid.v4();
 }
 
 export default {

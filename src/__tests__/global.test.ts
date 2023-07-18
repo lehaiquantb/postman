@@ -4,6 +4,7 @@ import request from 'supertest';
 const addCase = (name: string, cb: any) => {
     cb?.();
 };
+// const describe = tester.describe;
 describe('Tester', () => {
     it('should be defined', () => {
         expect({}).toBeDefined();
@@ -14,12 +15,10 @@ describe('Tester', () => {
         });
     });
 
-    tester.addCase('a', async () => {
-        describe('testCase_', () => {
-            it('testCase_ should be ', () => {
-                expect({}).toBeDefined();
-            });
+    describe('a', () => {
+        it('testaCase_ should be ', () => {
+            expect({}).toBeDefined();
         });
-        return 'a';
+        // return 'a';
     });
 });

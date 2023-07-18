@@ -3,7 +3,8 @@
 
 import { Base, BaseProps, IBase } from '../lib/base';
 import { Postwoman } from '../lib/postwoman';
-
+import { generateUuid } from '../utils/helper';
+import supertest, { CallbackHandler } from 'supertest';
 // let e1 = ((actual: any, ...rest: Array<any>) => {}) as jest.Expect;
 // e1.assertions = () => {
 //     pm.test("x",() => {
@@ -102,10 +103,19 @@ import { Postwoman } from '../lib/postwoman';
 // }
 // @Exclude()
 
+export class TestCase {
+    name: string;
+    func: () => Promise<any>;
+}
+
+export class TestFlow {
+    id: string = generateUuid();
+}
+
 /**
  * This file will be run in test environment, make sure to import only test dependencies
  */
-export class PWTester implements IBase {
+export class PWTestModule implements IBase {
     constructor(props?: BaseProps) {
         this.postman = props?.postman;
         this.postwoman = props?.postwoman;
@@ -122,6 +132,8 @@ export class PWTester implements IBase {
 
     testCaseList: TestCase[] = [];
 
+    testFlowList: TestFlow[] = [];
+
     log = (message?: any, ...args: any[]) => {
         console.log(`[PWTester]: ${message}`, ...args);
     };
@@ -130,21 +142,29 @@ export class PWTester implements IBase {
         console.log(`[PWTester]: ${message}`, ...args);
     };
 
-    // describe() {
-    //     describe('Tester', () => {
-    //         it('should be defined', () => {
-    //             expect({}).toBeDefined();
-    //             expect.assertions(1);
-    //         });
+    describe(name: string, cb: () => void) {
+        describe(name, () => {
+            console.log('describexxx', name);
+
+            cb();
+        });
+    }
+
+    // async describe(name: string, cb: () => Promise<any>) {
+    //     this.testCaseList.push({
+    //         name,
+    //         func: cb,
+
     //     });
+    //     console.log(await cb?.());
     // }
 
-    addCase(name: string, cb: any) {
+    async addCase(name: string, cb: () => Promise<any>) {
         this.testCaseList.push({
             name,
             func: cb,
         });
-        console.log(cb?.());
+        console.log(await cb?.());
     }
 
     start() {}
@@ -154,5 +174,43 @@ export class PWTester implements IBase {
     // expect: TesterExpect = expect;
 }
 
-const tester = new PWTester();
+type SupertestModuleProps = {
+    app?: any;
+};
+
+export class SupertestModule {
+    app: any;
+
+    constructor(props: SupertestModuleProps) {
+        this.app = props.app;
+    }
+
+    get request() {
+        return supertest(this.app);
+    }
+
+    async get(
+        url: string,
+        callback?: CallbackHandler,
+    ): Promise<SupertestModule> {
+        return new Promise((resolve, reject) => {
+            this.request.get(url, callback);
+            resolve(this);
+        });
+
+        // const res = await this.request
+        //     .get(url, callback)
+        //     .auth('username', 'password');
+        // res.body;
+    }
+
+    async post(...params: any) {
+        await this.request.get('/');
+        console.log('post', params);
+    }
+}
+
+const tester = new PWTestModule();
+const supertestModule = new SupertestModule({});
+
 export default tester;

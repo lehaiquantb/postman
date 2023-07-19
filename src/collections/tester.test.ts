@@ -1,10 +1,11 @@
 // import { MatcherState } from 'expect';
 // import { Plugin } from 'pretty-format';
 
+import { Exclude } from 'class-transformer';
 import { Base, BaseProps, IBase } from '../lib/base';
 import { Postwoman } from '../lib/postwoman';
 import { generateUuid } from '../utils/helper';
-import supertest, { CallbackHandler } from 'supertest';
+// import supertest, { CallbackHandler } from 'supertest';
 // let e1 = ((actual: any, ...rest: Array<any>) => {}) as jest.Expect;
 // e1.assertions = () => {
 //     pm.test("x",() => {
@@ -115,21 +116,7 @@ export class TestFlow {
 /**
  * This file will be run in test environment, make sure to import only test dependencies
  */
-export class PWTestModule implements IBase {
-    constructor(props?: BaseProps) {
-        this.postman = props?.postman;
-        this.postwoman = props?.postwoman;
-    }
-
-    init(props?: BaseProps): void {
-        this.postman = props?.postman;
-        this.postwoman = props?.postwoman;
-    }
-
-    postman?: Postman | undefined;
-
-    postwoman?: Postwoman | undefined;
-
+export class TestModule {
     testCaseList: TestCase[] = [];
 
     testFlowList: TestFlow[] = [];
@@ -142,13 +129,13 @@ export class PWTestModule implements IBase {
         console.log(`[PWTester]: ${message}`, ...args);
     };
 
-    describe(name: string, cb: () => void) {
-        describe(name, () => {
-            console.log('describexxx', name);
+    // describe(name: string, cb: () => void) {
+    //     describe(name, () => {
+    //         console.log('describexxx', name);
 
-            cb();
-        });
-    }
+    //         cb();
+    //     });
+    // }
 
     // async describe(name: string, cb: () => Promise<any>) {
     //     this.testCaseList.push({
@@ -174,6 +161,25 @@ export class PWTestModule implements IBase {
     // expect: TesterExpect = expect;
 }
 
+export class PWTestModule extends TestModule implements IBase {
+    constructor(props?: BaseProps) {
+        super();
+        this.postman = props?.postman;
+        this.postwoman = props?.postwoman;
+    }
+
+    init(props?: BaseProps): void {
+        this.postman = props?.postman;
+        this.postwoman = props?.postwoman;
+    }
+
+    @Exclude()
+    postman?: Postman | undefined;
+
+    @Exclude()
+    postwoman?: Postwoman | undefined;
+}
+
 type SupertestModuleProps = {
     app?: any;
 };
@@ -185,32 +191,57 @@ export class SupertestModule {
         this.app = props.app;
     }
 
-    get request() {
-        return supertest(this.app);
-    }
+    // get client() {
+    //     return supertest(this.app);
+    // }
 
-    async get(
-        url: string,
-        callback?: CallbackHandler,
-    ): Promise<SupertestModule> {
-        return new Promise((resolve, reject) => {
-            this.request.get(url, callback);
-            resolve(this);
-        });
+    // async get(
+    //     url: string,
+    //     callback?: CallbackHandler,
+    // ): Promise<SupertestModule> {
+    //     return new Promise((resolve, reject) => {
+    //         this.client.get(url, callback);
+    //         resolve(this);
+    //     });
 
-        // const res = await this.request
-        //     .get(url, callback)
-        //     .auth('username', 'password');
-        // res.body;
-    }
+    //     // const res = await this.request
+    //     //     .get(url, callback)
+    //     //     .auth('username', 'password');
+    //     // res.body;
+    // }
 
-    async post(...params: any) {
-        await this.request.get('/');
-        console.log('post', params);
-    }
+    // async post(...params: any) {
+    //     await this.client.get('/');
+    //     console.log('post', params);
+    // }
 }
 
 const tester = new PWTestModule();
 const supertestModule = new SupertestModule({});
+
+class TestRequest implements Promise<number> {
+    constructor() {}
+    then<TResult1 = number, TResult2 = never>(
+        onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>,
+        onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>,
+    ): Promise<TResult1 | TResult2> {
+        console.log('then');
+
+        throw new Error('Method not implemented.');
+    }
+    catch<TResult = never>(
+        onrejected?: (reason: any) => TResult | PromiseLike<TResult>,
+    ): Promise<number | TResult> {
+        console.log('catch');
+        throw new Error('Method not implemented.');
+    }
+    finally(onfinally?: () => void): Promise<number> {
+        console.log('finally');
+        throw new Error('Method not implemented.');
+    }
+    [Symbol.toStringTag]: string;
+}
+
+const a = new TestRequest();
 
 export default tester;

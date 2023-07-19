@@ -11,7 +11,7 @@ module.exports = {
         postwoman: postwomanPath,
     },
     output: {
-        path: path.join(__dirname, './scripts'), // Thư mục chứa file được build ra
+        path: path.join(__dirname, './lib'), // Thư mục chứa file được build ra
         filename: '[name].bundle.js', // Tên file được build ra
     },
     module: {
@@ -76,6 +76,7 @@ module.exports = {
             path: false,
             zlib: false,
             http: false,
+            http2: false,
             https: false,
             stream: false,
             crypto: false,

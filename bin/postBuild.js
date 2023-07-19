@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const minmist = require('minimist');
 
-let filePath = path.resolve(__dirname, '../scripts/postwoman.bundle.js');
+let filePath = path.resolve(__dirname, '../lib/postwoman.bundle.js');
 let newText = `var _postwoman_ = {};\n
 var _Postwoman_ = {};\n
 var _serializer = {};\n
@@ -12,7 +12,7 @@ function makePostwomanIsGlobal() {
     const params = minmist(process.argv);
     const { mode } = params;
     if (mode === 'production') {
-        filePath = path.resolve(__dirname, '../scripts/postwoman.min.js');
+        filePath = path.resolve(__dirname, '../lib/postwoman.min.js');
     }
     if (mode == 'development') {
         newText += `var pm = {};\nvar _plainPostwoman_ = {};\n`;

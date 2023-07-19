@@ -11,7 +11,7 @@ module.exports = {
         postwoman: postwomanPath,
     },
     output: {
-        path: path.join(__dirname, './scripts'), // Thư mục chứa file được build ra
+        path: path.join(__dirname, './lib'), // Thư mục chứa file được build ra
         filename: '[name].min.js', // Tên file được build ra
     },
     module: {

@@ -7,23 +7,22 @@ import {
     plainToInstance,
 } from 'class-transformer';
 import moment from 'moment';
-import { Request } from 'postman-collection';
 import 'reflect-metadata';
+import { PWOrder } from '../collections/order.pw';
 import { Runner } from '../collections/runner';
-import tester, { PWTestModule } from '../collections/tester.test';
+import { PWTestModule } from '../collections/tester.test';
 import '../plugins/moment/extendMoment';
 import constants from '../utils/constants';
 import faker from '../utils/faker';
-import helper from '../utils/helper';
+import helper, { getGlobalVar } from '../utils/helper';
 import { Variable } from '../utils/variable';
 import { Base, BaseProps } from './base';
-import { PWRequest } from '../collections/request';
-import { TransformToClassRequest } from '../decorators/transform.request.decorator';
 
 const VERSION = __VERSION__ || `${new Date().toISOString()}`;
 
 export type PWOnProcessOptions = {
     pm?: Postman;
+    console: typeof console;
 };
 
 export type PWOnProcessCallbackOptions = {
@@ -63,6 +62,8 @@ export class Postwoman extends Base {
     private static instance: Postwoman;
 
     public static getInstance(): Postwoman {
+        console.log('Postwoman getInstance');
+
         if (!Postwoman.instance) {
             Postwoman.instance = new Postwoman();
         }
@@ -124,15 +125,7 @@ export class Postwoman extends Base {
     //     console.log('transform', value);
     // })
     @Expose()
-    @TransformToClassRequest()
-    // @Exclude({ toPlainOnly: true })
-    @Transform(
-        (params: TransformFnParams) => {
-            return params?.value?.toJSON?.();
-        },
-        { toPlainOnly: true },
-    )
-    currentRequest?: PWRequest;
+    order?: PWOrder;
 
     // xs: X[] = [new X()];
 
@@ -148,6 +141,7 @@ export class Postwoman extends Base {
         try {
             const me = _pw ?? this;
             let postwomanObj = instanceToPlain(me);
+            this.log('postwomanObj', postwomanObj);
             if (typeof postwomanObj === 'object') {
                 if (postwomanObj?.SNAPSHOT_AT?.length) {
                     delete postwomanObj.SNAPSHOT_AT;
@@ -177,8 +171,10 @@ export class Postwoman extends Base {
         // );
     }
 
-    static create(_pm?: Postman): Postwoman {
+    static create(options: PWOnProcessOptions): Postwoman {
         try {
+            getGlobalVar('console')?.log('Creating');
+            const { pm: _pm } = options;
             let postwoman: Postwoman;
             const postwomanPlain = _pm?.collectionVariables?.get(
                 Postwoman.Constants.CKey.POSTWOMAN_PLAIN,
@@ -191,6 +187,10 @@ export class Postwoman extends Base {
                 extraData: { postman: _pm, postwoman },
             });
             postwoman.init({ postman: _pm });
+            options?.console?.log('Initialized');
+            if (options?.console) {
+                Postwoman.console = options?.console;
+            }
 
             // @ts-ignore
             // if (__VERSION__ !== postwomanObj?.version) {
@@ -217,7 +217,7 @@ export class Postwoman extends Base {
         callback: PWOnProcessCallback,
     ): Promise<void> {
         try {
-            const pw = Postwoman.create(options?.pm);
+            const pw = Postwoman.create(options);
             await callback({ pw });
             pw.snapShot(pw, options?.pm);
         } catch (error) {
@@ -291,30 +291,32 @@ export class Postwoman extends Base {
 //         `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{}},"runnerList":[{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}}}`,
 //     ),
 // );
-const pObj = Postwoman.Helper.parseJson(
-    `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{"a":1}},"runnerList":
-    [{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}},"xxx":{}}`,
-);
-
-pObj.h = function () {
-    console.log('hello');
-};
-// const _postwoman = {};
-const _postwoman = plainToInstance(Postwoman, {
-    variable: { a: {} },
-    pm: {},
-    currentRequest: {},
-});
-_postwoman.currentRequest = {} as any;
-const _plainPostwoman = instanceToPlain(_postwoman);
 
 // console.log(_postwoman);
 
 // const _postwoman = new Postwoman({ pm: {} });
 // console.log(instanceToPlain(_postwoman));
+const _postwoman = plainToInstance(Postwoman, {
+    variable: { a: {} },
+    pm: {},
+    tester: {},
+});
 
 Postwoman.log('HELLO POSTMAN with version => ', VERSION);
 if (__ENV__ === 'development') {
+    const pObj = Postwoman.Helper.parseJson(
+        `{"version":"2023-05-23T17:47:10.247Z","variable":{"values":{"a":1}},"runnerList":
+        [{"id":"runner-2023-05-24_00:47:37"}],"Tester":{},"currentRequest":{"rrr":{"v":2}},"xxx":{}}`,
+    );
+
+    pObj.h = function () {
+        console.log('hello');
+    };
+    // const _postwoman = {};
+
+    // _postwoman.order = {} as any;
+    const _plainPostwoman = instanceToPlain(_postwoman);
+
     // @ts-ignore
     _plainPostwoman_ = _plainPostwoman;
 }

@@ -7,7 +7,8 @@ import {
 } from 'class-transformer';
 import { Postwoman } from '../lib/postwoman';
 import { Base } from '../lib/base';
-import Uuid from 'uuid';
+import { uniqueId } from 'lodash';
+// import Uuid from 'uuid';
 
 function sayHello() {
     console.log('hello');
@@ -38,7 +39,7 @@ function get(key: string): any {
     return pm.collectionVariables.get(key);
 }
 
-function getGlobalVar<T = any>(varName: string): T | undefined {
+export function getGlobalVar<T = any>(varName: string): T | undefined {
     return varIsExist(varName) ? eval(varName) : undefined;
 }
 
@@ -69,12 +70,13 @@ function convertToInstance<T extends Base, V>(
     // console.log('options', options);
 
     const instance = plainToInstance(cls, plain, options);
-    instance?.init({ postman: __postman, postwoman: __postwoman });
+    // console.log('instance', instance);
 
+    instance?.init({ postman: __postman, postwoman: __postwoman });
     return instance;
 }
 
-function convertToInstanceFromTransformFnParams<T extends Base, V>(
+export function convertToInstanceFromTransformFnParams<T extends Base, V>(
     cls: ClassConstructor<T>,
     params?: TransformFnParams,
     postwoman?: Postwoman,
@@ -93,6 +95,7 @@ function convertToInstanceFromTransformFnParams<T extends Base, V>(
             postwoman: __postwoman,
         },
     });
+    console.log('param', params);
 
     // Postwoman.log('convertToInstanceFromTransformFnParams', params, instance);
 
@@ -100,7 +103,8 @@ function convertToInstanceFromTransformFnParams<T extends Base, V>(
 }
 
 export function generateUuid() {
-    return Uuid.v4();
+    // return Uuid.v4();
+    return uniqueId();
 }
 
 export default {
